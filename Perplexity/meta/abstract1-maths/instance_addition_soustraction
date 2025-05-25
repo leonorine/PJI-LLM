@@ -1,0 +1,12 @@
+digraph Instance_Addition_Soustraction {
+	rankdir=TB size="10,8"
+	node [fontname=Helvetica shape=record]
+	OperationsArithmetiques [label="{OperationsArithmetiques|+ conceptCle: Operations elementaires\l+ sousConceptsAssocies: [addition, soustraction]\l+ ageRecommande: 6-8 ans\l+ prerequis: [comptage, numeration]\l|+ genererAddition(difficulte)\l+ genererSoustraction(difficulte)\l+ evaluerResultat(reponse)\l}"]
+	ExerciceOperation [label="{ExerciceOperation|+ type: operation\l+ difficulte: 1-3\l+ contenu: {operande1, operateur, operande2}\l+ reponseAttendue: resultat\l|+ afficherOperation()\l+ verifierResultat(reponse)\l}"]
+	FeedbackOperation [label="{FeedbackOperation|+ type: textuel et visuel\l+ contenu: message adapte\l+ impactMotivation: positif/negatif\l|+ afficherMessage()\l+ montrerSolution()\l}"]
+	ProgressionOperation [label="{ProgressionOperation|+ niveauActuel: 1-5\l+ objectifs: maitrise des operations\l+ adaptativite: moyenne\l|+ augmenterDifficulte()\l+ changerTypeOperation()\l}"]
+	OperationsArithmetiques -> ExerciceOperation [label="génère"]
+	ExerciceOperation -> FeedbackOperation [label=produit]
+	FeedbackOperation -> ProgressionOperation [label=informe]
+	ProgressionOperation -> OperationsArithmetiques [label=ajuste]
+}

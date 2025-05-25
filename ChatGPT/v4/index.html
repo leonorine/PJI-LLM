@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu de Grandeurs et Mesures</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #eafaf1;
+            text-align: center;
+            padding: 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: inline-block;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .options button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            border: none;
+            background-color: #bbf7d0;
+            cursor: pointer;
+        }
+        .options button:hover {
+            background-color: #6ee7b7;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .progress {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Jeu de Grandeurs et Mesures</h1>
+<div class="card">
+    <p id="question"></p>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="progress" id="progress"></div>
+</div>
+
+<script>
+    const exercises = [
+        {
+            type: "longueur",
+            question: "Quel est le plus long ?",
+            options: ["1 m", "80 cm", "95 cm"],
+            correct: "1 m"
+        },
+        {
+            type: "masse",
+            question: "Quel objet pèse le plus lourd ?",
+            options: ["300 g", "1 kg", "900 g"],
+            correct: "1 kg"
+        },
+        {
+            type: "contenance",
+            question: "Quel récipient contient le plus ?",
+            options: ["1 L", "75 cl", "500 ml"],
+            correct: "1 L"
+        },
+        {
+            type: "durée",
+            question: "Quelle durée est la plus courte ?",
+            options: ["1 h", "45 min", "30 min"],
+            correct: "30 min"
+        },
+        {
+            type: "prix",
+            question: "Quel objet coûte le plus cher ?",
+            options: ["1,20 €", "1,80 €", "90 centimes"],
+            correct: "1,80 €"
+        },
+        {
+            type: "conversion",
+            question: "Combien de cm y a-t-il dans 1 m ?",
+            options: ["10", "100", "1000"],
+            correct: "100"
+        }
+    ];
+
+    let index = 0;
+    let score = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function showQuestion() {
+        const ex = exercises[index];
+        const shuffled = shuffle([...ex.options]);
+        document.getElementById("question").textContent = ex.question;
+        const optionsDiv = document.getElementById("options");
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "";
+        optionsDiv.innerHTML = "";
+
+        shuffled.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.textContent = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById("progress").textContent = `Exercice ${index + 1} sur ${exercises.length}`;
+    }
+
+    function checkAnswer(selected) {
+        const feedback = document.getElementById("feedback");
+        if (selected === exercises[index].correct) {
+            feedback.textContent = "Bravo ! C'est juste.";
+            feedback.style.color = "green";
+            score++;
+        } else {
+            feedback.textContent = `Non... la bonne réponse était : ${exercises[index].correct}`;
+            feedback.style.color = "red";
+        }
+        index++;
+        setTimeout(() => {
+            if (index < exercises.length) {
+                showQuestion();
+            } else {
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("progress").textContent = `Score : ${score} / ${exercises.length}`;
+                document.getElementById("feedback").textContent = "Jeu terminé !";
+            }
+        }, 1500);
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>
+

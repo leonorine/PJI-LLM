@@ -1,0 +1,309 @@
+// Safari Maths - Class Diagram
+digraph SafariMathsClassDiagram {
+	node [fontname=Helvetica fontsize=10 shape=plain]
+	edge [fontname=Helvetica fontsize=9 len=1.5]
+	newrank=true nodesep=0.8 rankdir=TB ranksep=1.0 splines=ortho
+	GameEngine [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>GameEngine</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +User currentUser<BR ALIGN="LEFT"/>
+    +Level currentLevel<BR ALIGN="LEFT"/>
+    +GameSettings settings<BR ALIGN="LEFT"/>
+    +ScoreKeeper scoreKeeper<BR ALIGN="LEFT"/>
+    +ProgressTracker progressTracker<BR ALIGN="LEFT"/>
+    +ProblemFactory problemFactory<BR ALIGN="LEFT"/>
+    +FeedbackController feedbackController<BR ALIGN="LEFT"/>
+    +RewardController rewardController<BR ALIGN="LEFT"/>
+    +UIController uiController<BR ALIGN="LEFT"/>
+    +List[MathOperation] activeOperations<BR ALIGN="LEFT"/>
+    +string currentOperationMode<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +startGame()<BR ALIGN="LEFT"/>
+    +requestNextProblem()<BR ALIGN="LEFT"/>
+    +submitUserAnswer(answer: string)()<BR ALIGN="LEFT"/>
+    +advanceLevel()<BR ALIGN="LEFT"/>
+    +setOperationMode(mode: string)()<BR ALIGN="LEFT"/>
+    +getCurrentDifficulty() : DifficultyProfile<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UIController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>UIController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ... attributes ...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +renderProblem(problem: Problem)()<BR ALIGN="LEFT"/>
+    +renderFeedback(feedback: Feedback)()<BR ALIGN="LEFT"/>
+    +updateScoreDisplay(score: int)()<BR ALIGN="LEFT"/>
+    +displayOperationSelection()<BR ALIGN="LEFT"/>
+    +getSelectedOperationMode() : string<BR ALIGN="LEFT"/>
+    +captureUserInput() : string<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	MathOperation [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><FONT POINT-SIZE="10">&lt;&lt;Interface&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>MathOperation</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +OperationType type<BR ALIGN="LEFT"/>
+    +string displaySymbol<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +calculateResult(operands: List[number]) : number()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile: DifficultyProfile) : List[number]()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands: List[number]) : string()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Addition [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>Addition</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +OperationType type = OperationType.ADDITION<BR ALIGN="LEFT"/>
+    +string displaySymbol = "+"<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +calculateResult(operands)()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile)()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Subtraction [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><FONT POINT-SIZE="10">&lt;&lt;IMPLEMENTED&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>Subtraction</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +OperationType type = OperationType.SUBTRACTION<BR ALIGN="LEFT"/>
+    +string displaySymbol = "-"<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +calculateResult(operands)()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile) : List[number]()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ProblemFactory [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>ProblemFactory</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +DifficultyAdaptationEngine adaptationEngine<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +generateNewProblem(level: Level, activeOps: List[MathOperation], currentMode: string) : Problem()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	DifficultyProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>DifficultyProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +int minOperandValue<BR ALIGN="LEFT"/>
+    +int maxOperandValue<BR ALIGN="LEFT"/>
+    +int numberOfOperands<BR ALIGN="LEFT"/>
+    +boolean allowNegativeResults (default: false)<BR ALIGN="LEFT"/>
+    +Map[string, any] operationSpecificConfigs<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	OperationType [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcyan">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="paleturquoise"><FONT POINT-SIZE="10">&lt;&lt;enumeration&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>OperationType</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    ADDITION<BR ALIGN="LEFT"/>
+    SUBTRACTION<BR ALIGN="LEFT"/>
+    MULTIPLICATION (Future)<BR ALIGN="LEFT"/>
+    DIVISION (Future)<BR ALIGN="LEFT"/>
+    MIXED (UI concept)<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	User [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>User</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Level [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>Level</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameSettings [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>GameSettings</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ScoreKeeper [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>ScoreKeeper</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ProgressTracker [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>ProgressTracker</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	FeedbackController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>FeedbackController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	RewardController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>RewardController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Problem [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>Problem</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Reward [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>Reward</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Feedback [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>Feedback</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	DifficultyAdaptationEngine [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>DifficultyAdaptationEngine</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UserProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>UserProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	OperationMetrics [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>OperationMetrics</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	LevelAttempt [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>LevelAttempt</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ProblemRecord [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>ProblemRecord</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UserPreferences [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="moccasin"><B>UserPreferences</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    ...attributes...<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    ...methods...()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameEngine -> MathOperation [label="\"* uses active\"" arrowhead=none arrowtail=odiamond dir=forward]
+	GameEngine -> UIController [arrowhead=none arrowtail=diamond dir=forward]
+	Addition -> MathOperation [arrowhead=empty color=blue dir=forward style=bold]
+	Subtraction -> MathOperation [label=<<Newly Active>> arrowhead=empty color=red dir=forward style=bold]
+	ProblemFactory -> MathOperation [label="\"selects/uses\"" arrowhead=vee style=dashed]
+	ProblemFactory -> DifficultyProfile [label="\"uses\"" arrowhead=vee style=dashed]
+	GameEngine -> ProblemFactory [arrowhead=none arrowtail=diamond dir=forward]
+	UIController -> GameEngine [label="\"signals op mode change\"" arrowhead=vee style=dashed]
+	MathOperation -> OperationType [label="\"has a type\"" arrowhead=vee style=dashed]
+	GameEngine -> OperationType [label="\"manages based on mode\"" arrowhead=vee style=dashed]
+}

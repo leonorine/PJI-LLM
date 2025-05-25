@@ -1,0 +1,178 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f2f1; /* Bleu-vert très clair pour un thème frais */
+    color: #263238; /* Gris foncé pour le texte */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 750px; /* Un peu plus large pour les questions potentiellement plus longues */
+}
+
+header h1 {
+    color: #00695c; /* Bleu-vert foncé pour le titre */
+    margin-bottom: 15px;
+    font-size: 2.3em;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #b2dfdb; /* Fond de la barre de progression */
+    border-radius: 10px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+    height: 24px;
+}
+
+#progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: #00796b; /* Couleur de progression */
+    border-radius: 10px 0 0 10px;
+    transition: width 0.5s ease-in-out;
+}
+
+header p {
+    font-size: 1.1em;
+    color: #37474f;
+}
+
+#animal-display {
+    margin: 25px 0;
+    min-height: 240px;
+}
+
+#animal-image {
+    max-width: 180px; /* Un peu plus petit pour laisser de la place au texte */
+    max-height: 180px;
+    border-radius: 50%; /* Image d'animal ronde */
+    border: 4px solid #4db6ac; /* Bordure assortie */
+    margin-bottom: 12px;
+    object-fit: cover;
+}
+
+#animal-fact {
+    font-style: italic;
+    color: #004d40; /* Texte du fait animal plus foncé */
+    min-height: 20px;
+    font-size: 1.1em;
+    padding: 0 10px;
+}
+
+#question-area {
+    margin: 25px 0;
+    padding: 15px;
+    background-color: #f0f7f7; /* Fond léger pour la zone de question */
+    border-radius: 12px;
+}
+
+#question-text {
+    font-size: 1.45em; /* Taille de police légèrement augmentée pour la lisibilité */
+    font-weight: bold;
+    color: #102027;
+    min-height: 40px; /* Assurer une hauteur minimale */
+    line-height: 1.4;
+}
+
+#question-image { /* Styles pour l'image de la question si utilisée */
+    display: none; /* Cachée par défaut */
+    max-width: 250px;
+    max-height: 150px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #a7ffeb;
+}
+
+
+#options-area {
+    display: grid; /* Utilisation de grid pour un meilleur alignement */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Colonnes responsives */
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 70px;
+    padding: 0 10px; /* Un peu de padding pour ne pas coller aux bords */
+}
+
+.option-button {
+    padding: 18px 15px; /* Padding augmenté */
+    font-size: 1.25em;
+    background-color: #26a69a; /* Couleur principale pour les options */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.option-button:hover {
+    background-color: #00897b; /* Plus foncé au survol */
+    transform: scale(1.03);
+}
+
+.option-button:active {
+    transform: scale(0.98);
+}
+
+#feedback-area {
+    min-height: 50px;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+#feedback-text {
+    font-size: 1.35em;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.correct {
+    color: #00796b; /* Vert pour feedback correct */
+}
+
+.incorrect {
+    color: #d32f2f; /* Rouge pour feedback incorrect */
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #546e7a;
+}
+
+/* Pour les petits écrans */
+@media (max-width: 520px) {
+    .container {
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 1.9em;
+    }
+    #question-text {
+        font-size: 1.25em;
+    }
+    .option-button {
+        font-size: 1.1em;
+        padding: 15px 10px;
+    }
+    #options-area {
+        grid-template-columns: 1fr; /* Une seule colonne sur petits écrans */
+    }
+    #animal-image {
+        max-width: 140px;
+        max-height: 140px;
+    }
+}

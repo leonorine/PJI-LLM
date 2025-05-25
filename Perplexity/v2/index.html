@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Maths - Addition et Soustraction</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4b0082;
+            margin-bottom: 20px;
+        }
+
+        .operation-selector {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .operation-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .operation-btn.active {
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+
+        .addition-btn {
+            background-color: #87ceeb;
+        }
+
+        .addition-btn.active {
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        .subtraction-btn {
+            background-color: #ffa07a;
+        }
+
+        .subtraction-btn.active {
+            background-color: #ff6347;
+            color: white;
+        }
+
+        .mixed-btn {
+            background-color: #98fb98;
+        }
+
+        .mixed-btn.active {
+            background-color: #32cd32;
+            color: white;
+        }
+
+        .question {
+            font-size: 28px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .operation-symbol {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 20px;
+            width: 80px;
+            border: 2px solid #4b0082;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #6a0dad;
+        }
+
+        .feedback {
+            margin: 15px 0;
+            font-size: 18px;
+            min-height: 27px;
+        }
+
+        .correct {
+            color: #008000;
+        }
+
+        .incorrect {
+            color: #ff0000;
+        }
+
+        .progress {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #4b0082;
+        }
+
+        .stats {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            min-width: 100px;
+        }
+
+        .addition-stats {
+            background-color: rgba(135, 206, 235, 0.3);
+        }
+
+        .subtraction-stats {
+            background-color: rgba(255, 160, 122, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Jeu de Maths</h1>
+
+    <div class="operation-selector">
+        <button class="operation-btn addition-btn active" id="addition-btn">Addition</button>
+        <button class="operation-btn subtraction-btn" id="subtraction-btn">Soustraction</button>
+        <button class="operation-btn mixed-btn" id="mixed-btn">Mixte</button>
+    </div>
+
+    <div class="question">
+        <span id="num1">5</span>
+        <span class="operation-symbol" id="operation">+</span>
+        <span id="num2">3</span>
+        <span>=</span>
+        <input type="number" id="answer" min="0">
+    </div>
+
+    <button id="check">Vérifier</button>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="progress">
+        Question <span id="current">1</span> sur <span id="total">10</span>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box addition-stats">
+            <div>Additions</div>
+            <div><span id="addition-correct">0</span>/<span id="addition-total">0</span></div>
+        </div>
+        <div class="stat-box subtraction-stats">
+            <div>Soustractions</div>
+            <div><span id="subtraction-correct">0</span>/<span id="subtraction-total">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Modèle du jeu
+    class MathGame {
+        constructor() {
+            // Initialisation des variables du jeu
+            this.currentQuestion = null;
+            this.currentQuestionNumber = 1;
+            this.totalQuestions = 10;
+            this.operationType = 'addition'; // 'addition', 'subtraction', 'mixed'
+
+            // Statistiques
+            this.stats = {
+                addition: { correct: 0, total: 0 },
+                subtraction: { correct: 0, total: 0 }
+            };
+
+            // Éléments du DOM
+            this.num1Element = document.getElementById('num1');
+            this.num2Element = document.getElementById('num2');
+            this.operationElement = document.getElementById('operation');
+            this.answerInput = document.getElementById('answer');
+            this.checkButton = document.getElementById('check');
+            this.feedbackElement = document.getElementById('feedback');
+            this.currentElement = document.getElementById('current');
+            this.totalElement = document.getElementById('total');
+
+            // Boutons d'opération
+            this.additionBtn = document.getElementById('addition-btn');
+            this.subtractionBtn = document.getElementById('subtraction-btn');
+            this.mixedBtn = document.getElementById('mixed-btn');
+
+            // Statistiques
+            this.additionCorrectElement = document.getElementById('addition-correct');
+            this.additionTotalElement = document.getElementById('addition-total');
+            this.subtractionCorrectElement = document.getElementById('subtraction-correct');
+            this.subtractionTotalElement = document.getElementById('subtraction-total');
+
+            // Initialisation des événements
+            this.initEvents();
+
+            // Génération de la première question
+            this.generateQuestion();
+            this.updateUI();
+        }
+
+        initEvents() {
+            // Événement pour le bouton de vérification
+            this.checkButton.addEventListener('click', () => this.checkAnswer());
+
+            // Événement pour la touche Entrée
+            this.answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.checkAnswer();
+                }
+            });
+
+            // Événements pour les boutons d'opération
+            this.additionBtn.addEventListener('click', () => this.setOperationType('addition'));
+            this.subtractionBtn.addEventListener('click', () => this.setOperationType('subtraction'));
+            this.mixedBtn.addEventListener('click', () => this.setOperationType('mixed'));
+        }
+
+        setOperationType(type) {
+            this.operationType = type;
+
+            // Mise à jour de l'UI pour les boutons
+            this.additionBtn.classList.remove('active');
+            this.subtractionBtn.classList.remove('active');
+            this.mixedBtn.classList.remove('active');
+
+            if (type === 'addition') {
+                this.additionBtn.classList.add('active');
+            } else if (type === 'subtraction') {
+                this.subtractionBtn.classList.add('active');
+            } else {
+                this.mixedBtn.classList.add('active');
+            }
+
+            // Génération d'une nouvelle question
+            this.generateQuestion();
+            this.updateUI();
+        }
+
+        generateQuestion() {
+            let type = this.operationType;
+
+            // Si le type est mixte, choisir aléatoirement entre addition et soustraction
+            if (type === 'mixed') {
+                type = Math.random() < 0.5 ? 'addition' : 'subtraction';
+            }
+
+            if (type === 'addition') {
+                // Génération d'une question d'addition
+                const num1 = Math.floor(Math.random() * 10);
+                const num2 = Math.floor(Math.random() * 10);
+
+                this.currentQuestion = {
+                    num1: num1,
+                    num2: num2,
+                    operation: '+',
+                    answer: num1 + num2,
+                    type: 'addition'
+                };
+            } else {
+                // Génération d'une question de soustraction
+                // Pour éviter les résultats négatifs pour les enfants de 6-8 ans
+                let num1 = Math.floor(Math.random() * 10) + 1;
+                let num2 = Math.floor(Math.random() * (num1 + 1)); // Assure que num2 <= num1
+
+                this.currentQuestion = {
+                    num1: num1,
+                    num2: num2,
+                    operation: '-',
+                    answer: num1 - num2,
+                    type: 'subtraction'
+                };
+            }
+
+            // Mise à jour des statistiques
+            this.stats[this.currentQuestion.type].total++;
+        }
+
+        checkAnswer() {
+            const userAnswer = parseInt(this.answerInput.value);
+
+            // Vérification si la réponse est valide
+            if (isNaN(userAnswer)) {
+                this.feedbackElement.textContent = "S'il te plaît, entre un nombre.";
+                this.feedbackElement.className = "feedback incorrect";
+                return;
+            }
+
+            // Vérification de la réponse
+            if (userAnswer === this.currentQuestion.answer) {
+                this.feedbackElement.textContent = "Bravo ! Bonne réponse !";
+                this.feedbackElement.className = "feedback correct";
+
+                // Mise à jour des statistiques
+                this.stats[this.currentQuestion.type].correct++;
+
+                // Passer à la question suivante
+                if (this.currentQuestionNumber < this.totalQuestions) {
+                    this.currentQuestionNumber++;
+                    this.generateQuestion();
+                } else {
+                    // Fin du jeu
+                    setTimeout(() => {
+                        alert("Bravo ! Tu as terminé le jeu !");
+                        this.resetGame();
+                    }, 1000);
+                }
+            } else {
+                this.feedbackElement.textContent = "Essaie encore ! Ce n'est pas la bonne réponse.";
+                this.feedbackElement.className = "feedback incorrect";
+            }
+
+            // Mise à jour de l'interface
+            this.updateUI();
+            this.answerInput.value = "";
+            this.answerInput.focus();
+        }
+
+        updateUI() {
+            // Mise à jour des éléments de la question
+            this.num1Element.textContent = this.currentQuestion.num1;
+            this.num2Element.textContent = this.currentQuestion.num2;
+            this.operationElement.textContent = this.currentQuestion.operation;
+
+            // Mise à jour de la progression
+            this.currentElement.textContent = this.currentQuestionNumber;
+            this.totalElement.textContent = this.totalQuestions;
+
+            // Mise à jour des statistiques
+            this.additionCorrectElement.textContent = this.stats.addition.correct;
+            this.additionTotalElement.textContent = this.stats.addition.total;
+            this.subtractionCorrectElement.textContent = this.stats.subtraction.correct;
+            this.subtractionTotalElement.textContent = this.stats.subtraction.total;
+        }
+
+        resetGame() {
+            this.currentQuestionNumber = 1;
+            this.generateQuestion();
+            this.feedbackElement.textContent = "";
+            this.feedbackElement.className = "feedback";
+            this.updateUI();
+        }
+    }
+
+    // Initialisation du jeu
+    document.addEventListener('DOMContentLoaded', () => {
+        const game = new MathGame();
+    });
+</script>
+</body>
+</html>

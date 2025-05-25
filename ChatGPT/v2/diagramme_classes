@@ -1,0 +1,61 @@
+digraph Jeu_Mathematique_Classes {
+	rankdir=LR size=10
+	Game [label="{Game|
+- questions: List<Question>\l
+- currentQuestionIndex: int\l
+- score: int\l
+- totalQuestions: int\l
+- difficulty: DifficultyLevel\l
+- operationType: OperationType\l
+- player: PlayerProfile\l
+|
++ startGame()\l
++ generateQuestion(): Question\l
++ submitAnswer(choice: int): bool\l
++ restartGame()\l
+}"]
+	Question [label="{Question|
+- operand1: int\l
+- operand2: int\l
+- correctAnswer: int\l
+- choices: List<int>\l
+- operation: OperationType\l
+|
++ isCorrect(choice: int): bool\l
+}"]
+	PlayerProfile [label="{PlayerProfile|
+- name: string\l
+- progressData: ProgressData\l
+|
++ updateProgress()\l
++ getLevel(): DifficultyLevel\l
+}"]
+	ProgressData [label="{ProgressData|
+- history: List<ScoreRecord>\l
+- averageScore: float\l
+- preferredOperation: OperationType\l
+}"]
+	ScoreRecord [label="{ScoreRecord|
+- date: Date\l
+- score: int\l
+- difficulty: DifficultyLevel\l
+- operation: OperationType\l
+}"]
+	OperationType [label="{OperationType|
+ADDITION\l
+SOUSTRACTION\l
+MULTIPLICATION\l
+}" shape=record]
+	DifficultyLevel [label="{DifficultyLevel|
+EASY\l
+MEDIUM\l
+HARD\l
+}" shape=record]
+	Game -> Question [label="1..*"]
+	Game -> PlayerProfile [label=1]
+	PlayerProfile -> ProgressData [label=1]
+	ProgressData -> ScoreRecord [label="1..*"]
+	Game -> OperationType [label=uses]
+	Question -> OperationType [label=uses]
+	ProgressData -> OperationType [label=prefers]
+}

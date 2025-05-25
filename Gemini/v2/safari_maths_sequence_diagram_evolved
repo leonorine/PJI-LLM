@@ -1,0 +1,39 @@
+// Safari Maths - User Interaction Sequence
+digraph SafariMathsSequenceDiagram {
+	node [fillcolor=lightblue fontname=Helvetica fontsize=10 shape=box style="rounded,filled"]
+	edge [fontname=Helvetica fontsize=9]
+	nodesep=0.5 rankdir=TB splines=ortho
+	User [fillcolor=khaki shape=actor]
+	UIController [fillcolor=lightgreen]
+	GameEngine [fillcolor=lightcoral]
+	ProblemFactory
+	SelectedMathOperation [label="MathOperation
+(Addition/Subtraction)" fillcolor=lightgoldenrodyellow]
+	FeedbackController
+	ScoreKeeper
+	ProgressTracker
+	User -> UIController [label="1. Choisit le mode d'opération
+(Addition, Soustraction, Mixte)"]
+	UIController -> GameEngine [label="2. informeModeChoisi(mode)"]
+	GameEngine -> GameEngine [label="3. setOperationMode(mode)
+   configure activeOperations"]
+	GameEngine -> ProblemFactory [label="4. demandeNouveauProblème(niveau, modeOp)"]
+	ProblemFactory -> SelectedMathOperation [label="5. génèreOpérandesPourDifficulté()"]
+	SelectedMathOperation -> ProblemFactory [label="6. retourneOpérandes()"]
+	ProblemFactory -> SelectedMathOperation [label="7. calculeRésultat()"]
+	SelectedMathOperation -> ProblemFactory [label="8. retourneRéponseCorrecte()"]
+	ProblemFactory -> GameEngine [label="9. retourneProblème(Problème)"]
+	GameEngine -> UIController [label="10. afficheProblème(Problème)"]
+	User -> UIController [label="11. Entre sa réponse"]
+	UIController -> GameEngine [label="12. soumetRéponseUtilisateur(réponse)"]
+	GameEngine -> GameEngine [label="13. évalueRéponse()"]
+	GameEngine -> FeedbackController [label="14. demandeFeedback(estCorrect, réponseCorrecte)"]
+	FeedbackController -> GameEngine [label="15. retourneFeedback(Feedback)"]
+	GameEngine -> ScoreKeeper [label="16. metÀJourScore(estCorrect)"]
+	GameEngine -> ProgressTracker [label="17. enregistreTentative(Problème, réponseUtilisateur, estCorrect)"]
+	GameEngine -> UIController [label="18. metÀJourAffichage(Feedback, score, niveau)"]
+	UIController -> User [label="19. Affiche feedback & état du jeu"]
+	GameEngine -> GameEngine [label="20. Vérifie si niveau complété
+   (Si oui, advanceLevel())"]
+	GameEngine -> GameEngine [label="21. Prépare le prochain cycle (retour à l'étape 4 ou 1)"]
+}

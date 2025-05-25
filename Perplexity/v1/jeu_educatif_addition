@@ -1,0 +1,16 @@
+digraph G {
+	rankdir=LR size="8,5"
+	Jeu [label="Jeu Educatif Addition" color=lightblue shape=box style=filled]
+	Question [label="Question d'addition" color=lightyellow shape=ellipse style=filled]
+	Utilisateur [label="Utilisateur (Enfant)" color=lightgreen shape=box style=filled]
+	Progression [label="Système de progression" color=lightpink shape=diamond style=filled]
+	Jeu -> Question [label="génère"]
+	Utilisateur -> Question [label="répond à"]
+	Jeu -> Progression [label="met à jour"]
+	Progression -> Utilisateur [label="affiche progrès"]
+	"Règles" [label="Règles du jeu:
+- 10 questions
+- Feedback immédiat
+- Pas de pénalité" color=orange shape=note]
+	"Règles" -> Jeu [style=dashed]
+}

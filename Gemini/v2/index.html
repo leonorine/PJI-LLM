@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Maths</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Safari Maths</h1> <div class="progress-bar">
+        <div id="progress-bar-fill"></div>
+    </div>
+        <p>Score: <span id="score">0</span> | Niveau: <span id="level">1</span></p>
+    </header>
+
+    <main>
+        <div id="operation-selection-area">
+            <fieldset>
+                <legend>Choisis une opération :</legend>
+                <div>
+                    <input type="radio" id="op-addition" name="operation" value="addition" checked>
+                    <label for="op-addition">Addition (+)</label>
+                </div>
+                <div>
+                    <input type="radio" id="op-subtraction" name="operation" value="subtraction">
+                    <label for="op-subtraction">Soustraction (-)</label>
+                </div>
+                <div>
+                    <input type="radio" id="op-mixed" name="operation" value="mixed">
+                    <label for="op-mixed">Mélangé (+/-)</label>
+                </div>
+            </fieldset>
+        </div>
+
+        <div id="animal-display">
+            <img id="animal-image" src="images/placeholder.png" alt="Animal du Safari">
+            <p id="animal-fact"></p>
+        </div>
+
+        <div id="problem-area">
+        </div>
+
+        <div id="answer-area">
+            <input type="number" id="answer-input" autofocus>
+            <button id="submit-button">Répondre</button>
+        </div>
+
+        <div id="feedback-area">
+            <p id="feedback-text"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Jeu Éducatif Safari Maths</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

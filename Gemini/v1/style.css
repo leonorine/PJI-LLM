@@ -1,0 +1,149 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; /* Bleu ciel clair */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+header h1 {
+    color: #4CAF50; /* Vert safari */
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+}
+
+#progress-bar-fill {
+    height: 20px;
+    width: 0%; /* Commence à 0% */
+    background-color: #4CAF50; /* Vert safari */
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+}
+
+header p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+#animal-display {
+    margin: 20px 0;
+    min-height: 220px; /* Pour éviter les sauts de page */
+}
+
+#animal-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 10px;
+    border: 3px solid #4CAF50;
+    margin-bottom: 10px;
+}
+
+#animal-fact {
+    font-style: italic;
+    color: #666;
+    min-height: 20px; /* Pour éviter les sauts de page */
+}
+
+#problem-area {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 30px 0;
+    color: #333;
+}
+
+#answer-area {
+    margin-bottom: 30px;
+}
+
+#answer-input {
+    padding: 15px;
+    font-size: 1.5em;
+    width: 100px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+#submit-button {
+    padding: 15px 25px;
+    font-size: 1.2em;
+    background-color: #FF9800; /* Orange safari */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submit-button:hover {
+    background-color: #FB8C00; /* Orange plus foncé */
+}
+
+#feedback-area {
+    min-height: 40px; /* Pour éviter les sauts de page */
+    margin-top: 15px;
+}
+
+#feedback-text {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.correct {
+    color: #4CAF50; /* Vert safari */
+}
+
+.incorrect {
+    color: #F44336; /* Rouge */
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Pour les petits écrans */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+    #problem-area {
+        font-size: 2em;
+    }
+    #answer-input {
+        font-size: 1.2em;
+        padding: 10px;
+        width: 80px;
+    }
+    #submit-button {
+        font-size: 1em;
+        padding: 12px 20px;
+    }
+    header h1 {
+        font-size: 1.8em;
+    }
+}

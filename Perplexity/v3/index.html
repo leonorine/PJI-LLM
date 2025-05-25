@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Grammaire - Orthographe</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fff8dc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #6a5acd;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            background-color: #dcdcdc;
+            border: 2px solid #6a5acd;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            min-width: 120px;
+            user-select: none;
+        }
+        .option-btn:hover {
+            background-color: #6a5acd;
+            color: white;
+            border-color: #483d8b;
+        }
+        .option-btn.correct {
+            background-color: #32cd32;
+            color: white;
+            border-color: #228b22;
+            cursor: default;
+        }
+        .option-btn.incorrect {
+            background-color: #ff4500;
+            color: white;
+            border-color: #b22222;
+            cursor: default;
+        }
+        .feedback {
+            font-size: 20px;
+            min-height: 28px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .progress {
+            font-size: 16px;
+            color: #6a5acd;
+        }
+        button#next-btn {
+            background-color: #6a5acd;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            user-select: none;
+        }
+        button#next-btn:disabled {
+            background-color: #b0aeea;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Jeu de Grammaire - Orthographe</h1>
+    <div class="question" id="question">Quelle est l'orthographe correcte ?</div>
+    <div class="options" id="options">
+        <!-- Boutons d'options générés dynamiquement -->
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="progress">Question <span id="current">1</span> sur <span id="total">10</span></div>
+    <button id="next-btn" disabled>Question suivante</button>
+</div>
+
+<script>
+    class GrammarGame {
+        constructor() {
+            this.questions = [
+                {correct: "chien", options: ["chien", "chian", "chiene"]},
+                {correct: "maison", options: ["maison", "maisson", "maizon"]},
+                {correct: "arbre", options: ["arbre", "arbrez", "arbr"]},
+                {correct: "fleur", options: ["fleur", "fleure", "fluer"]},
+                {correct: "livre", options: ["livre", "livvre", "livr"]},
+                {correct: "école", options: ["école", "ecole", "écol"]},
+                {correct: "pomme", options: ["pomme", "pom", "pome"]},
+                {correct: "soleil", options: ["soleil", "soliel", "soleille"]},
+                {correct: "chat", options: ["chat", "chatt", "chate"]},
+                {correct: "voiture", options: ["voiture", "voituer", "voitur"]}
+            ];
+            this.currentIndex = 0;
+            this.totalQuestions = this.questions.length;
+            this.score = 0;
+
+            this.questionElement = document.getElementById('question');
+            this.optionsElement = document.getElementById('options');
+            this.feedbackElement = document.getElementById('feedback');
+            this.currentElement = document.getElementById('current');
+            this.totalElement = document.getElementById('total');
+            this.nextButton = document.getElementById('next-btn');
+
+            this.nextButton.addEventListener('click', () => this.nextQuestion());
+
+            this.loadQuestion();
+        }
+
+        loadQuestion() {
+            this.feedbackElement.textContent = '';
+            this.nextButton.disabled = true;
+            this.currentElement.textContent = this.currentIndex + 1;
+            this.totalElement.textContent = this.totalQuestions;
+
+            const currentQuestion = this.questions[this.currentIndex];
+            this.questionElement.textContent = "Quelle est l'orthographe correcte ?";
+
+            // Mélanger les options
+            const shuffledOptions = this.shuffleArray(currentQuestion.options.slice());
+
+            // Vider les options précédentes
+            this.optionsElement.innerHTML = '';
+
+            // Créer les boutons d'options
+            shuffledOptions.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.className = 'option-btn';
+                btn.addEventListener('click', () => this.checkAnswer(btn, option));
+                this.optionsElement.appendChild(btn);
+            });
+        }
+
+        checkAnswer(button, selectedOption) {
+            const currentQuestion = this.questions[this.currentIndex];
+            const buttons = this.optionsElement.querySelectorAll('button');
+
+            // Désactiver tous les boutons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedOption === currentQuestion.correct) {
+                button.classList.add('correct');
+                this.feedbackElement.textContent = 'Bravo ! Bonne réponse !';
+                this.score++;
+            } else {
+                button.classList.add('incorrect');
+                this.feedbackElement.textContent = 'Essaie encore ! Ce n\'est pas la bonne réponse.';
+                // Marquer la bonne réponse
+                buttons.forEach(btn => {
+                    if (btn.textContent === currentQuestion.correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            this.nextButton.disabled = false;
+        }
+
+        nextQuestion() {
+            this.currentIndex++;
+            if (this.currentIndex < this.totalQuestions) {
+                this.loadQuestion();
+            } else {
+                this.endGame();
+            }
+        }
+
+        endGame() {
+            this.questionElement.textContent = `Jeu terminé ! Ton score est ${this.score} sur ${this.totalQuestions}.`;
+            this.optionsElement.innerHTML = '';
+            this.feedbackElement.textContent = '';
+            this.nextButton.disabled = true;
+        }
+
+        shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new GrammarGame();
+    });
+</script>
+</body>
+</html>

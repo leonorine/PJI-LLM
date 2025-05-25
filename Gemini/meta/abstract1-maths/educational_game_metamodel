@@ -1,0 +1,229 @@
+// Metamodel for Educational Math Games
+digraph EducationalGameMetamodel {
+	node [fontname=Helvetica fontsize=10 shape=plain]
+	edge [fontname=Helvetica fontsize=9 len=1.8]
+	nodesep=0.6 overlap=false rankdir=TB ranksep=1.2 splines=spline
+	EducationalGame [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="khaki">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>EducationalGame</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    targetAudience: String<BR ALIGN="LEFT"/>
+    overallGoals: List&lt;String&gt;<BR ALIGN="LEFT"/>
+    theme: GameTheme (Optional)<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    initialize()<BR ALIGN="LEFT"/>
+    runGameLoop()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameActivity [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcoral">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>GameActivity</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    activityId: String<BR ALIGN="LEFT"/>
+    associatedObjectives: List&lt;LearningObjective&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    startActivity()<BR ALIGN="LEFT"/>
+    endActivity()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameTheme [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgrey">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>GameTheme</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    name: String<BR ALIGN="LEFT"/>
+    visualStyle: String<BR ALIGN="LEFT"/>
+    narrativeElements: List&lt;String&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	LearningDomain [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>LearningDomain</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    name: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	LearningObjective [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>LearningObjective</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    objectiveId: String<BR ALIGN="LEFT"/>
+    description: String<BR ALIGN="LEFT"/>
+    requiredSkills: List&lt;Skill&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	Skill [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>Skill</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    skillId: String<BR ALIGN="LEFT"/>
+    description: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	ExerciseTemplate [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>ExerciseTemplate</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    templateId: String<BR ALIGN="LEFT"/>
+    interactionType: String<BR ALIGN="LEFT"/>
+    targetObjective: LearningObjective<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    definePresentationFormat()<BR ALIGN="LEFT"/>
+    defineSolutionFormat()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ExerciseInstance [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>ExerciseInstance</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    instanceId: String<BR ALIGN="LEFT"/>
+    presentationData: PresentationData<BR ALIGN="LEFT"/>
+    solutionData: SolutionData<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    presentToUser()<BR ALIGN="LEFT"/>
+    evaluateAnswer(userAnswer)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	PresentationData [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>PresentationData</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    content: Any<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	SolutionData [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>SolutionData</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    expectedAnswer: Any<BR ALIGN="LEFT"/>
+    tolerance: Float (Optional)<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	ExerciseGenerator [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="moccasin">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>ExerciseGenerator</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Attributes:</B><BR ALIGN="LEFT"/> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    generateInstance(template: ExerciseTemplate, difficulty: DifficultyProfile): ExerciseInstance()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	DifficultyProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>DifficultyProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    levelId: String<BR ALIGN="LEFT"/>
+    parameters: Map&lt;String, Any&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	ProgressionController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>ProgressionController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    strategy: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    getNextActivityOrExercise(performance: UserPerformanceData): GameActivity/ExerciseInstance()<BR ALIGN="LEFT"/>
+    updateDifficulty(performance: UserPerformanceData): DifficultyProfile()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UserProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>UserProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    userId: String<BR ALIGN="LEFT"/>
+    preferences: Map&lt;String, Any&gt;<BR ALIGN="LEFT"/>
+    performanceData: UserPerformanceData<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    loadProfile()<BR ALIGN="LEFT"/>
+    saveProfile()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UserPerformanceData [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>UserPerformanceData</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    metrics: Map&lt;EvaluationMetric, List&lt;Result&gt;&gt;<BR ALIGN="LEFT"/>
+    masteryLevels: Map&lt;LearningObjective, Float&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    recordResult(metric, result)()<BR ALIGN="LEFT"/>
+    calculateMastery()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	EvaluationMetric [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>EvaluationMetric</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    metricId: String<BR ALIGN="LEFT"/>
+    description: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	FeedbackPolicy [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>FeedbackPolicy</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    timing: String<BR ALIGN="LEFT"/>
+    contentFormat: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    generateFeedback(isCorrect, context): Feedback()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Feedback [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="powderblue"><B>Feedback</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    message: String<BR ALIGN="LEFT"/>
+    type: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	EducationalGame -> GameActivity [label="\"1..*\" contains" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGame -> LearningDomain [label="\"1..*\" covers" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGame -> ProgressionController [label="\"1\" uses" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGame -> FeedbackPolicy [label="\"1\" defines" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGame -> EvaluationMetric [label="\"1..*\" defines" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGame -> GameTheme [label="\"0..1\" has" arrowhead=none arrowtail=odiamond dir=forward]
+	EducationalGame -> UserProfile [label="\"1..*\" for" arrowhead=none arrowtail=odiamond dir=forward]
+	LearningDomain -> LearningObjective [label="\"1..*\" contains" arrowhead=none arrowtail=diamond dir=forward]
+	LearningObjective -> Skill [label="\"0..*\" requires" arrowhead=none arrowtail=odiamond dir=forward]
+	GameActivity -> LearningObjective [label="\"1..*\" targets" arrowhead=vee]
+	GameActivity -> ExerciseTemplate [label="\"1..*\" uses" arrowhead=vee]
+	ExerciseTemplate -> LearningObjective [label="\"1\" targets" arrowhead=vee]
+	ExerciseInstance -> PresentationData [label="\"1\" has" arrowhead=none arrowtail=diamond dir=forward]
+	ExerciseInstance -> SolutionData [label="\"1\" has" arrowhead=none arrowtail=diamond dir=forward]
+	ExerciseInstance -> ExerciseTemplate [label="\"1\" instantiates" arrowhead=open style=dashed]
+	ExerciseGenerator -> ExerciseTemplate [label="\"uses\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> DifficultyProfile [label="\"uses\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> ExerciseInstance [label="\"creates\"" arrowhead=vee style=dashed]
+	ProgressionController -> GameActivity [label="\"selects\"" arrowhead=vee style=dashed]
+	ProgressionController -> ExerciseInstance [label="\"selects\"" arrowhead=vee style=dashed]
+	ProgressionController -> DifficultyProfile [label="\"manages/updates\"" arrowhead=vee style=dashed]
+	ProgressionController -> UserPerformanceData [label="\"uses\"" arrowhead=vee style=dashed]
+	UserProfile -> UserPerformanceData [label="\"1\" contains" arrowhead=none arrowtail=diamond dir=forward]
+	UserPerformanceData -> EvaluationMetric [label="\"records for\"" arrowhead=vee style=dashed]
+	UserPerformanceData -> LearningObjective [label="\"tracks mastery of\"" arrowhead=vee style=dashed]
+	FeedbackPolicy -> Feedback [label="\"generates\"" arrowhead=vee style=dashed]
+	FeedbackPolicy -> ExerciseInstance [label="\"uses context from\"" arrowhead=vee style=dashed]
+	EducationalGame -> ExerciseGenerator [label="\"1\" uses" arrowhead=none arrowtail=odiamond dir=forward]
+}

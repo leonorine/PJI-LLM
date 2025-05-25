@@ -1,0 +1,94 @@
+
+@startuml Meta_Modele_Jeux_Mathematiques
+
+' Configuration générale
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+' Définition des classes principales
+class DomaineMathematique {
+  + conceptCle: string
+  + sousConceptsAssocies: list
+  + ageRecommande: range
+  + prerequis: list
+  --
+  + genererExercice(difficulte)
+  + evaluerReponse(reponse)
+}
+
+class Apprenant {
+  + age: int
+  + niveau: int
+  + historiquePerformance: dict
+  + preferenceApprentissage: dict
+  --
+  + repondreExercice(exercice)
+  + recevoirFeedback(feedback)
+  + mettreAJourNiveau()
+}
+
+class Exercice {
+  + type: string
+  + difficulte: int
+  + contenu: dict
+  + reponseAttendue: any
+  + tempsMaximum: int
+  --
+  + presenter()
+  + verifierReponse(reponse)
+  + genererIndice()
+}
+
+class Feedback {
+  + type: string
+  + contenu: string
+  + impactMotivation: float
+  + indiceAssocie: string
+  --
+  + presenter()
+  + ajusterDifficulte()
+  + suggererActiviteComplementaire()
+}
+
+class Progression {
+  + niveauActuel: int
+  + objectifsApprentissage: list
+  + cheminParcours: list
+  + adaptativite: float
+  --
+  + determinerProchainExercice()
+  + evaluerMaitrise()
+  + ajusterDifficulte()
+  + genererRapportProgression()
+}
+
+class Jeu {
+  + nom: string
+  + interfaceGraphique: dict
+  + mecaniquesJeu: list
+  + recompenses: dict
+  --
+  + initialiser()
+  + executerTour()
+  + terminerSession()
+  + sauvegarderProgression()
+}
+
+' Relations entre les classes
+Jeu --> DomaineMathematique : utilise
+Jeu --> Apprenant : interagit avec
+Jeu --> Exercice : présente
+Jeu --> Feedback : fournit
+Jeu --> Progression : gère
+
+DomaineMathematique --> Exercice : génère
+Apprenant --> Exercice : répond à
+Exercice --> Feedback : détermine
+Feedback --> Progression : influence
+Progression --> DomaineMathematique : adapte
+Progression --> Apprenant : met à jour
+
+@enduml

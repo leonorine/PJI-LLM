@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Grammaire</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #fef8e7;
+            text-align: center;
+            padding: 20px;
+        }
+        .card {
+            background: #fff9df;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .options button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            border: none;
+            background-color: #ffd972;
+            cursor: pointer;
+        }
+        .options button:hover {
+            background-color: #ffcc4d;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .progress {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Jeu de Grammaire</h1>
+<div class="card">
+    <p><strong>Choisis le mot bien orthographié :</strong></p>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="progress" id="progress"></div>
+</div>
+
+<script>
+    const words = [
+        { correct: "chocolat", options: ["chocolat", "chocola", "chocolas"] },
+        { correct: "éléphant", options: ["éléfant", "éléphant", "elephan"] },
+        { correct: "camion", options: ["camion", "cammion", "camionn"] },
+        { correct: "chaussette", options: ["chossète", "chaussette", "chaucette"] },
+        { correct: "banane", options: ["banane", "bananne", "bannane"] }
+    ];
+
+    let index = 0;
+    let score = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function showQuestion() {
+        const question = words[index];
+        const shuffled = shuffle([...question.options]);
+        const optionsDiv = document.getElementById("options");
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "";
+        optionsDiv.innerHTML = "";
+
+        shuffled.forEach(word => {
+            const btn = document.createElement("button");
+            btn.textContent = word;
+            btn.onclick = () => checkAnswer(word);
+            optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById("progress").textContent = `Question ${index + 1} sur ${words.length}`;
+    }
+
+    function checkAnswer(selected) {
+        const feedback = document.getElementById("feedback");
+        if (selected === words[index].correct) {
+            feedback.textContent = "Bravo ! C'est la bonne orthographe.";
+            feedback.style.color = "green";
+            score++;
+        } else {
+            feedback.textContent = `Oops ! La bonne réponse était : ${words[index].correct}`;
+            feedback.style.color = "red";
+        }
+        index++;
+        setTimeout(() => {
+            if (index < words.length) {
+                showQuestion();
+            } else {
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("progress").textContent = `Score : ${score} / ${words.length}`;
+                document.getElementById("feedback").textContent = "Jeu terminé !";
+            }
+        }, 1500);
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>

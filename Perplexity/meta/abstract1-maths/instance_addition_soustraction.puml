@@ -1,0 +1,57 @@
+
+@startuml Instance_Addition_Soustraction
+
+' Configuration générale
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+' Définition des classes spécifiques
+class OperationsArithmetiques {
+  + conceptCle: "Opérations élémentaires"
+  + sousConceptsAssocies: [addition, soustraction]
+  + ageRecommande: 6-8 ans
+  + prerequis: [comptage, numération]
+  --
+  + genererAddition(difficulte)
+  + genererSoustraction(difficulte)
+  + evaluerResultat(reponse)
+}
+
+class ExerciceOperation {
+  + type: "opération"
+  + difficulte: 1-3
+  + contenu: {operande1, operateur, operande2}
+  + reponseAttendue: resultat
+  --
+  + afficherOperation()
+  + verifierResultat(reponse)
+}
+
+class FeedbackOperation {
+  + type: "textuel et visuel"
+  + contenu: message adapté
+  + impactMotivation: positif/négatif
+  --
+  + afficherMessage()
+  + montrerSolution()
+}
+
+class ProgressionOperation {
+  + niveauActuel: 1-5
+  + objectifs: maîtrise des opérations
+  + adaptativite: moyenne
+  --
+  + augmenterDifficulte()
+  + changerTypeOperation()
+}
+
+' Relations entre les classes
+OperationsArithmetiques --> ExerciceOperation : génère
+ExerciceOperation --> FeedbackOperation : produit
+FeedbackOperation --> ProgressionOperation : informe
+ProgressionOperation --> OperationsArithmetiques : ajuste
+
+@enduml

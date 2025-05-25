@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu d'Addition</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .question {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .answers {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .answer-button {
+            padding: 10px 20px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 10px;
+            background-color: #add8e6;
+            cursor: pointer;
+        }
+        .answer-button:hover {
+            background-color: #87ceeb;
+        }
+        .progress {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="progress" id="progress">Question 1 sur 10</div>
+</div>
+
+<script>
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const progressEl = document.getElementById("progress");
+
+    let currentQuestion = 0;
+    let score = 0;
+    const totalQuestions = 10;
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateQuestion() {
+        const num1 = getRandomInt(1, 10);
+        const num2 = getRandomInt(1, 10);
+        const correctAnswer = num1 + num2;
+
+        const answers = new Set([correctAnswer]);
+        while (answers.size < 4) {
+            answers.add(getRandomInt(correctAnswer - 3, correctAnswer + 3));
+        }
+
+        const shuffledAnswers = Array.from(answers).sort(() => Math.random() - 0.5);
+
+        return {
+            questionText: `${num1} + ${num2} = ?`,
+            correctAnswer,
+            choices: shuffledAnswers
+        };
+    }
+
+    function showQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            questionEl.textContent = `Bravo ! Score : ${score} / ${totalQuestions}`;
+            answersEl.innerHTML = "<button onclick='restartGame()' class='answer-button'>Rejouer</button>";
+            progressEl.textContent = "";
+            return;
+        }
+
+        const q = generateQuestion();
+        questionEl.textContent = q.questionText;
+        answersEl.innerHTML = "";
+
+        q.choices.forEach(choice => {
+            const btn = document.createElement("button");
+            btn.textContent = choice;
+            btn.className = "answer-button";
+            btn.onclick = () => {
+                if (choice === q.correctAnswer) {
+                    score++;
+                }
+                currentQuestion++;
+                progressEl.textContent = `Question ${currentQuestion + 1} sur ${totalQuestions}`;
+                showQuestion();
+            };
+            answersEl.appendChild(btn);
+        });
+    }
+
+    function restartGame() {
+        currentQuestion = 0;
+        score = 0;
+        progressEl.textContent = `Question 1 sur ${totalQuestions}`;
+        showQuestion();
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>

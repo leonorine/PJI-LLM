@@ -1,0 +1,159 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e8f5e9; /* Vert clair pour un thème nature/safari */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+}
+
+header h1 {
+    color: #2e7d32; /* Vert foncé pour le titre */
+    margin-bottom: 15px;
+    font-size: 2.2em;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #c8e6c9; /* Vert plus clair pour le fond de la barre */
+    border-radius: 10px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+    height: 22px;
+}
+
+#progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Commence à 0% */
+    background-color: #4caf50; /* Vert pour la progression */
+    border-radius: 10px 0 0 10px; /* Coins arrondis seulement à gauche au début */
+    transition: width 0.5s ease-in-out;
+}
+
+header p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+#animal-display {
+    margin: 25px 0;
+    min-height: 230px; /* Pour éviter les sauts de page */
+}
+
+#animal-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 10px;
+    border: 3px solid #66bb6a; /* Bordure verte pour l'image */
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+#animal-fact {
+    font-style: italic;
+    color: #455a64; /* Gris-bleu pour le fait */
+    min-height: 20px;
+    font-size: 1.05em;
+}
+
+#question-area {
+    margin: 25px 0;
+}
+
+#instruction {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #333;
+}
+
+#options-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Permet aux options de passer à la ligne si nécessaire */
+    gap: 15px; /* Espace entre les boutons d'option */
+    margin-bottom: 30px;
+    min-height: 60px;
+}
+
+.option-button {
+    padding: 15px 25px;
+    font-size: 1.3em;
+    background-color: #ffb74d; /* Orange clair pour les options */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    min-width: 120px; /* Largeur minimale pour les boutons */
+}
+
+.option-button:hover {
+    background-color: #ffa726; /* Orange plus foncé au survol */
+    transform: translateY(-2px);
+}
+
+.option-button:active {
+    transform: translateY(1px);
+}
+
+#feedback-area {
+    min-height: 45px;
+    margin-top: 15px;
+}
+
+#feedback-text {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.correct {
+    color: #4caf50; /* Vert pour feedback correct */
+}
+
+.incorrect {
+    color: #f44336; /* Rouge pour feedback incorrect */
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Pour les petits écrans */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+    header h1 {
+        font-size: 1.8em;
+    }
+    #instruction {
+        font-size: 1.2em;
+    }
+    .option-button {
+        font-size: 1.1em;
+        padding: 12px 18px;
+        min-width: 100px;
+    }
+    #animal-image {
+        max-width: 150px;
+        max-height: 150px;
+    }
+}

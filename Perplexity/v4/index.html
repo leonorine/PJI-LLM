@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu des Grandeurs et Mesures</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .exercise-type {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .question {
+            font-size: 22px;
+            margin: 20px 0;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .visual-element {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            border: 2px dashed #2e7d32;
+        }
+
+        .measurement-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background-color: #e1f5fe;
+            border: 3px solid #2e7d32;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            font-weight: bold;
+        }
+
+        .option-btn:hover {
+            background-color: #2e7d32;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .option-btn.correct {
+            background-color: #4caf50;
+            color: white;
+            border-color: #388e3c;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f44336;
+            color: white;
+            border-color: #d32f2f;
+        }
+
+        .feedback {
+            font-size: 20px;
+            min-height: 30px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            color: #4caf50;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .progress {
+            font-size: 18px;
+            color: #2e7d32;
+            margin: 15px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            min-width: 100px;
+        }
+
+        button#next-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        button#next-btn:hover {
+            background-color: #1b5e20;
+        }
+
+        button#next-btn:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔍 Jeu des Grandeurs et Mesures</h1>
+
+    <div class="exercise-type" id="exercise-type">
+        Type d'exercice : Comparaison de longueurs
+    </div>
+
+    <div class="question" id="question">
+        Quelle est la plus grande longueur ?
+    </div>
+
+    <div class="visual-element" id="visual-element">
+        <!-- Élément visuel généré dynamiquement -->
+    </div>
+
+    <div class="options" id="options">
+        <!-- Options générées dynamiquement -->
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="progress">
+        Question <span id="current">1</span> sur <span id="total">15</span>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div>Score</div>
+            <div><span id="score">0</span>/<span id="total-questions">15</span></div>
+        </div>
+        <div class="stat-box">
+            <div>Niveau</div>
+            <div id="level">Débutant</div>
+        </div>
+    </div>
+
+    <button id="next-btn" disabled>Question suivante</button>
+</div>
+
+<script>
+    class MeasurementGame {
+        constructor() {
+            // Configuration du jeu
+            this.currentQuestionIndex = 0;
+            this.totalQuestions = 15;
+            this.score = 0;
+            this.level = 1;
+
+            // Types d'exercices avec leurs configurations
+            this.exerciseTypes = {
+                longueur: {
+                    name: "Longueur",
+                    units: ["mm", "cm", "dm", "m", "km"],
+                    conversions: { mm: 1, cm: 10, dm: 100, m: 1000, km: 1000000 },
+                    examples: ["crayon", "table", "maison", "route"]
+                },
+                masse: {
+                    name: "Masse",
+                    units: ["g", "kg"],
+                    conversions: { g: 1, kg: 1000 },
+                    examples: ["pomme", "livre", "chien", "voiture"]
+                },
+                contenance: {
+                    name: "Contenance",
+                    units: ["mL", "L"],
+                    conversions: { mL: 1, L: 1000 },
+                    examples: ["verre", "bouteille", "seau", "piscine"]
+                },
+                duree: {
+                    name: "Durée",
+                    units: ["s", "min", "h"],
+                    conversions: { s: 1, min: 60, h: 3600 },
+                    examples: ["clignement", "chanson", "film", "journée"]
+                },
+                prix: {
+                    name: "Prix",
+                    units: ["c", "€"],
+                    conversions: { c: 1, "€": 100 },
+                    examples: ["bonbon", "livre", "jouet", "vélo"]
+                }
+            };
+
+            // Éléments DOM
+            this.exerciseTypeElement = document.getElementById('exercise-type');
+            this.questionElement = document.getElementById('question');
+            this.visualElement = document.getElementById('visual-element');
+            this.optionsElement = document.getElementById('options');
+            this.feedbackElement = document.getElementById('feedback');
+            this.currentElement = document.getElementById('current');
+            this.totalElement = document.getElementById('total');
+            this.scoreElement = document.getElementById('score');
+            this.totalQuestionsElement = document.getElementById('total-questions');
+            this.levelElement = document.getElementById('level');
+            this.nextButton = document.getElementById('next-btn');
+
+            // Événements
+            this.nextButton.addEventListener('click', () => this.nextQuestion());
+
+            // Initialisation
+            this.updateUI();
+            this.generateQuestion();
+        }
+
+        generateQuestion() {
+            // Sélection aléatoire du type d'exercice
+            const typeKeys = Object.keys(this.exerciseTypes);
+            const selectedType = typeKeys[Math.floor(Math.random() * typeKeys.length)];
+            const exerciseConfig = this.exerciseTypes[selectedType];
+
+            // Types d'exercices possibles
+            const exerciseVariants = ['comparison', 'estimation', 'conversion'];
+            const variant = exerciseVariants[Math.floor(Math.random() * exerciseVariants.length)];
+
+            this.currentQuestion = {
+                type: selectedType,
+                variant: variant,
+                config: exerciseConfig
+            };
+
+            // Génération selon le type d'exercice
+            switch (variant) {
+                case 'comparison':
+                    this.generateComparisonQuestion();
+                    break;
+                case 'estimation':
+                    this.generateEstimationQuestion();
+                    break;
+                case 'conversion':
+                    this.generateConversionQuestion();
+                    break;
+            }
+
+            this.updateQuestionDisplay();
+        }
+
+        generateComparisonQuestion() {
+            const config = this.currentQuestion.config;
+            const units = config.units;
+
+            // Génération de 3 mesures à comparer
+            const measurements = [];
+            for (let i = 0; i < 3; i++) {
+                const unit = units[Math.floor(Math.random() * units.length)];
+                const value = Math.floor(Math.random() * 100) + 1;
+                measurements.push({
+                    value: value,
+                    unit: unit,
+                    baseValue: value * config.conversions[unit],
+                    display: `${value} ${unit}`
+                });
+            }
+
+            // Tri pour trouver la plus grande valeur
+            measurements.sort((a, b) => b.baseValue - a.baseValue);
+
+            this.currentQuestion.measurements = measurements;
+            this.currentQuestion.correctAnswer = measurements[0].display;
+            this.currentQuestion.question = `Quelle est la plus grande ${config.name.toLowerCase()} ?`;
+            this.currentQuestion.options = measurements.map(m => m.display);
+        }
+
+        generateEstimationQuestion() {
+            const config = this.currentQuestion.config;
+            const example = config.examples[Math.floor(Math.random() * config.examples.length)];
+
+            // Génération d'estimations réalistes selon l'objet
+            const estimations = this.getRealisticEstimations(this.currentQuestion.type, example);
+
+            this.currentQuestion.object = example;
+            this.currentQuestion.correctAnswer = estimations.correct;
+            this.currentQuestion.question = `Quelle est la ${config.name.toLowerCase()} approximative d'un(e) ${example} ?`;
+            this.currentQuestion.options = [estimations.correct, ...estimations.incorrect];
+        }
+
+        generateConversionQuestion() {
+            const config = this.currentQuestion.config;
+            const units = config.units;
+
+            if (units.length < 2) {
+                // Si pas assez d'unités, générer une question de comparaison
+                this.generateComparisonQuestion();
+                return;
+            }
+
+            const fromUnit = units[Math.floor(Math.random() * units.length)];
+            let toUnit;
+            do {
+                toUnit = units[Math.floor(Math.random() * units.length)];
+            } while (toUnit === fromUnit);
+
+            const value = Math.floor(Math.random() * 10) + 1;
+            const convertedValue = (value * config.conversions[fromUnit]) / config.conversions[toUnit];
+
+            this.currentQuestion.value = value;
+            this.currentQuestion.fromUnit = fromUnit;
+            this.currentQuestion.toUnit = toUnit;
+            this.currentQuestion.correctAnswer = `${convertedValue} ${toUnit}`;
+            this.currentQuestion.question = `Combien font ${value} ${fromUnit} en ${toUnit} ?`;
+
+            // Génération d'options incorrectes
+            const incorrectOptions = [];
+            for (let i = 0; i < 2; i++) {
+                const wrongValue = convertedValue * (Math.random() > 0.5 ? 2 : 0.5);
+                incorrectOptions.push(`${wrongValue} ${toUnit}`);
+            }
+
+            this.currentQuestion.options = [this.currentQuestion.correctAnswer, ...incorrectOptions];
+        }
+
+        getRealisticEstimations(type, object) {
+            const estimations = {
+                longueur: {
+                    crayon: { correct: "15 cm", incorrect: ["1 m", "5 mm"] },
+                    table: { correct: "1 m", incorrect: ["10 cm", "10 m"] },
+                    maison: { correct: "10 m", incorrect: ["1 m", "100 m"] },
+                    route: { correct: "1 km", incorrect: ["100 m", "10 km"] }
+                },
+                masse: {
+                    pomme: { correct: "200 g", incorrect: ["2 kg", "20 g"] },
+                    livre: { correct: "500 g", incorrect: ["5 kg", "50 g"] },
+                    chien: { correct: "20 kg", incorrect: ["2 kg", "200 kg"] },
+                    voiture: { correct: "1000 kg", incorrect: ["100 kg", "10000 kg"] }
+                },
+                contenance: {
+                    verre: { correct: "250 mL", incorrect: ["2 L", "25 mL"] },
+                    bouteille: { correct: "1 L", incorrect: ["100 mL", "10 L"] },
+                    seau: { correct: "10 L", incorrect: ["1 L", "100 L"] },
+                    piscine: { correct: "1000 L", incorrect: ["100 L", "10000 L"] }
+                },
+                duree: {
+                    clignement: { correct: "1 s", incorrect: ["1 min", "1 h"] },
+                    chanson: { correct: "3 min", incorrect: ["30 s", "30 min"] },
+                    film: { correct: "2 h", incorrect: ["20 min", "20 h"] },
+                    journée: { correct: "24 h", incorrect: ["12 h", "48 h"] }
+                },
+                prix: {
+                    bonbon: { correct: "50 c", incorrect: ["5 €", "5 c"] },
+                    livre: { correct: "10 €", incorrect: ["1 €", "100 €"] },
+                    jouet: { correct: "25 €", incorrect: ["2 €", "250 €"] },
+                    vélo: { correct: "200 €", incorrect: ["20 €", "2000 €"] }
+                }
+            };
+
+            return estimations[type][object] || { correct: "?", incorrect: ["?", "?"] };
+        }
+
+        updateQuestionDisplay() {
+            const config = this.currentQuestion.config;
+
+            // Mise à jour du type d'exercice
+            let exerciseTypeText = `${config.name} - `;
+            switch (this.currentQuestion.variant) {
+                case 'comparison':
+                    exerciseTypeText += "Comparaison";
+                    break;
+                case 'estimation':
+                    exerciseTypeText += "Estimation";
+                    break;
+                case 'conversion':
+                    exerciseTypeText += "Conversion";
+                    break;
+            }
+            this.exerciseTypeElement.textContent = exerciseTypeText;
+
+            // Mise à jour de la question
+            this.questionElement.textContent = this.currentQuestion.question;
+
+            // Mise à jour de l'élément visuel
+            this.updateVisualElement();
+
+            // Mise à jour des options
+            this.updateOptions();
+
+            // Réinitialisation du feedback et du bouton
+            this.feedbackElement.textContent = '';
+            this.feedbackElement.className = 'feedback';
+            this.nextButton.disabled = true;
+        }
+
+        updateVisualElement() {
+            let visualContent = '';
+
+            switch (this.currentQuestion.variant) {
+                case 'comparison':
+                    if (this.currentQuestion.measurements) {
+                        visualContent = '<div style="font-weight: bold; margin-bottom: 10px;">Comparez ces mesures :</div>';
+                        this.currentQuestion.measurements.forEach((m, index) => {
+                            visualContent += `<div class="measurement-display">${String.fromCharCode(65 + index)}) ${m.display}</div>`;
+                        });
+                    }
+                    break;
+                case 'estimation':
+                    if (this.currentQuestion.object) {
+                        visualContent = `<div style="font-size: 20px; margin: 10px 0;">🔍 Objet à estimer : <strong>${this.currentQuestion.object}</strong></div>`;
+                    }
+                    break;
+                case 'conversion':
+                    visualContent = `<div style="font-size: 18px; color: #1976d2;">💱 Conversion d'unités</div>`;
+                    break;
+            }
+
+            this.visualElement.innerHTML = visualContent;
+        }
+
+        updateOptions() {
+            this.optionsElement.innerHTML = '';
+
+            // Mélanger les options
+            const shuffledOptions = this.shuffleArray([...this.currentQuestion.options]);
+
+            shuffledOptions.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.className = 'option-btn';
+                btn.addEventListener('click', () => this.checkAnswer(btn, option));
+                this.optionsElement.appendChild(btn);
+            });
+        }
+
+        checkAnswer(button, selectedOption) {
+            const buttons = this.optionsElement.querySelectorAll('button');
+
+            // Désactiver tous les boutons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedOption === this.currentQuestion.correctAnswer) {
+                button.classList.add('correct');
+                this.feedbackElement.textContent = '🎉 Excellent ! Bonne réponse !';
+                this.feedbackElement.className = 'feedback correct';
+                this.score++;
+            } else {
+                button.classList.add('incorrect');
+                this.feedbackElement.textContent = `❌ Pas tout à fait ! La bonne réponse était : ${this.currentQuestion.correctAnswer}`;
+                this.feedbackElement.className = 'feedback incorrect';
+
+                // Marquer la bonne réponse
+                buttons.forEach(btn => {
+                    if (btn.textContent === this.currentQuestion.correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            this.nextButton.disabled = false;
+            this.updateUI();
+        }
+
+        nextQuestion() {
+            this.currentQuestionIndex++;
+
+            if (this.currentQuestionIndex < this.totalQuestions) {
+                this.generateQuestion();
+            } else {
+                this.endGame();
+            }
+
+            this.updateUI();
+        }
+
+        endGame() {
+            const percentage = Math.round((this.score / this.totalQuestions) * 100);
+
+            this.exerciseTypeElement.textContent = "🏆 Jeu terminé !";
+            this.questionElement.textContent = `Bravo ! Tu as obtenu ${this.score} bonnes réponses sur ${this.totalQuestions} (${percentage}%)`;
+            this.visualElement.innerHTML = '<div style="font-size: 24px; color: #4caf50;">🎊 Félicitations ! 🎊</div>';
+            this.optionsElement.innerHTML = '';
+            this.feedbackElement.textContent = '';
+            this.nextButton.style.display = 'none';
+        }
+
+        updateUI() {
+            this.currentElement.textContent = this.currentQuestionIndex + 1;
+            this.totalElement.textContent = this.totalQuestions;
+            this.scoreElement.textContent = this.score;
+            this.totalQuestionsElement.textContent = this.totalQuestions;
+
+            // Mise à jour du niveau basé sur le score
+            const percentage = (this.score / (this.currentQuestionIndex + 1)) * 100;
+            if (percentage >= 80) {
+                this.levelElement.textContent = "Expert";
+            } else if (percentage >= 60) {
+                this.levelElement.textContent = "Confirmé";
+            } else {
+                this.levelElement.textContent = "Débutant";
+            }
+        }
+
+        shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    }
+
+    // Initialisation du jeu
+    document.addEventListener('DOMContentLoaded', () => {
+        new MeasurementGame();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+
+@startuml Instance_Formes_Geometriques
+
+' Configuration générale
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+' Définition des classes spécifiques
+class GeometrieElementaire {
+  + conceptCle: "Formes géométriques"
+  + sousConceptsAssocies: [2D, 3D, propriétés]
+  + ageRecommande: 5-9 ans
+  + prerequis: [observation, comparaison]
+  --
+  + genererFormeAleatoire()
+  + evaluerIdentification(reponse)
+}
+
+class ExerciceFormes {
+  + type: "identification"
+  + difficulte: 1-4
+  + contenu: {image, propriétés}
+  + reponseAttendue: nom de la forme
+  --
+  + afficherForme()
+  + demanderProprietes()
+}
+
+class FeedbackInteractif {
+  + type: "manipulatif"
+  + contenu: forme interactive
+  + impactMotivation: découverte
+  --
+  + permettreRotation()
+  + soulignerCaracteristiques()
+}
+
+class ProgressionGeometrie {
+  + niveauActuel: simple à complexe
+  + objectifs: classification des formes
+  + adaptativite: élevée
+  --
+  + introduireNouvellesFamilles()
+  + complexifierFormes()
+}
+
+' Relations entre les classes
+GeometrieElementaire --> ExerciceFormes : génère
+ExerciceFormes --> FeedbackInteractif : produit
+FeedbackInteractif --> ProgressionGeometrie : informe
+ProgressionGeometrie --> GeometrieElementaire : ajuste
+
+@enduml

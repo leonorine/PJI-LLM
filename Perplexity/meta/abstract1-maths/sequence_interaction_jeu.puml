@@ -1,0 +1,61 @@
+
+@startuml Sequence_Interaction_Jeu
+
+' Configuration générale
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam sequenceArrowThickness 2
+
+' Participants
+actor Utilisateur as User
+participant "Jeu" as Game
+participant "DomaineMathematique" as Domain
+participant "Exercice" as Exercise
+participant "Feedback" as Feedback
+participant "Progression" as Progress
+
+' Séquence d'interactions
+User -> Game: Choisit type d'opération
+(addition/soustraction/mixte)
+activate Game
+
+Game -> Domain: Demande génération d'exercice
+activate Domain
+Domain -> Exercise: Crée exercice adapté
+activate Exercise
+Domain <-- Exercise: Exercice créé
+deactivate Exercise
+Game <-- Domain: Exercice fourni
+deactivate Domain
+
+Game -> User: Affiche exercice
+User -> Game: Répond à l'exercice
+
+Game -> Exercise: Vérifie réponse
+activate Exercise
+Game <-- Exercise: Résultat de vérification
+deactivate Exercise
+
+Game -> Feedback: Génère feedback adapté
+activate Feedback
+Game <-- Feedback: Feedback fourni
+deactivate Feedback
+
+Game -> User: Affiche feedback
+
+Game -> Progress: Met à jour progression
+activate Progress
+Progress -> Domain: Ajuste difficulté
+activate Domain
+Progress <-- Domain: Confirmation
+deactivate Domain
+Game <-- Progress: Progression mise à jour
+deactivate Progress
+
+Game -> User: Affiche progression
+Game -> User: Propose exercice suivant
+
+deactivate Game
+
+@enduml

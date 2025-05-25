@@ -1,0 +1,190 @@
+// Model for Safari des Mesures Game
+digraph SafariDesMesures_Model {
+	node [fontname=Helvetica fontsize=10 shape=plain]
+	edge [fontname=Helvetica fontsize=9 len=1.5]
+	newrank=true nodesep=0.7 rankdir=TB ranksep=1.0 splines=spline
+	GameEngine [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcoral">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10">&lt;&lt;Core&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>GameEngine</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    +UserProfile currentUserProfile<BR ALIGN="LEFT"/>
+    +GameLevel currentLevel<BR ALIGN="LEFT"/>
+    +GameConfiguration settings<BR ALIGN="LEFT"/>
+    +ScoreManager scoreManager<BR ALIGN="LEFT"/>
+    +UserProgressTracker progressTracker<BR ALIGN="LEFT"/>
+    +ExerciseGenerator exerciseGenerator<BR ALIGN="LEFT"/>
+    +FeedbackSystem feedbackSystem<BR ALIGN="LEFT"/>
+    +RewardSystem rewardSystem<BR ALIGN="LEFT"/>
+    +UIManager uiManager<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    +startGame()<BR ALIGN="LEFT"/>
+    +requestNextExercise()<BR ALIGN="LEFT"/>
+    +submitUserAnswer(answer: string)()<BR ALIGN="LEFT"/>
+    +advanceLevel()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UserProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>UserProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    userId: string<BR ALIGN="LEFT"/>
+    currentLevelId: int<BR ALIGN="LEFT"/>
+    totalScore: int<BR ALIGN="LEFT"/>
+    preferences: UserPreferences<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	UserProgressTracker [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>UserProgressTracker</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Attributes:</B><BR ALIGN="LEFT"/> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    loadProfile()<BR ALIGN="LEFT"/>
+    saveProfile()<BR ALIGN="LEFT"/>
+    logAttempt(isCorrect: boolean)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameLevel [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>GameLevel</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    levelId: int<BR ALIGN="LEFT"/>
+    levelName: string<BR ALIGN="LEFT"/>
+    targetCorrectExercises: int<BR ALIGN="LEFT"/>
+    difficultyParams: MeasurementDifficultyParams<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	MeasurementDifficultyParams [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10">&lt;&lt;Specific&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>MeasurementDifficultyParams</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    grandeursCovered: List&lt;string&gt;<BR ALIGN="LEFT"/>
+    unitsInvolved: List&lt;string&gt;<BR ALIGN="LEFT"/>
+    maxNumericValue: int<BR ALIGN="LEFT"/>
+    conversionComplexity: int (0-2)<BR ALIGN="LEFT"/>
+    problemTypes: List&lt;string&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	GameConfiguration [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>GameConfiguration</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    levels: Map&lt;int, GameLevel&gt;<BR ALIGN="LEFT"/>
+    measurementDatabase: Map&lt;int, List&lt;MeasurementExerciseData&gt;&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	MeasurementExercise [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10">&lt;&lt;Specific&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>MeasurementExercise</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    grandeur: string (Longueur, Masse, etc.)<BR ALIGN="LEFT"/>
+    questionText: string<BR ALIGN="LEFT"/>
+    imagePath: string (optional)<BR ALIGN="LEFT"/>
+    options: List&lt;string&gt;<BR ALIGN="LEFT"/>
+    correctAnswer: string<BR ALIGN="LEFT"/>
+    explanation: string (optional)<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	MeasurementExerciseData [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="cornsilk">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10">&lt;&lt;Data Transfer Object&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>MeasurementExerciseData</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    grandeur: string<BR ALIGN="LEFT"/>
+    questionText: string<BR ALIGN="LEFT"/>
+    options: List&lt;string&gt;<BR ALIGN="LEFT"/>
+    correctAnswer: string<BR ALIGN="LEFT"/>
+    imagePath?: string<BR ALIGN="LEFT"/>
+    explanation?: string<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	ExerciseGenerator [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="moccasin">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10">&lt;&lt;Specific&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ExerciseGenerator</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Attributes:</B><BR ALIGN="LEFT"/> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    generateExercise(levelId: int, db: Map, params: MeasurementDifficultyParams): MeasurementExercise()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ScoreManager [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>ScoreManager</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    currentScore: int<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    updateScore(isCorrect: boolean)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	FeedbackSystem [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>FeedbackSystem</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Attributes:</B><BR ALIGN="LEFT"/> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    generateFeedback(isCorrect: boolean, correctAnswer: string, explanation?: string): FeedbackMessage()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	FeedbackMessage [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>FeedbackMessage</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    text: string<BR ALIGN="LEFT"/>
+    type: string<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	RewardSystem [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>RewardSystem</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    availableRewards: List&lt;Reward&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    getRewardForMilestone(): Reward<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Reward [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>Reward</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    name: string<BR ALIGN="LEFT"/>
+    imagePath: string<BR ALIGN="LEFT"/>
+    fact: string<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	UIManager [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcyan">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><B>UIManager</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"><B>Attributes:</B><BR ALIGN="LEFT"/> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    <B>Methods:</B><BR ALIGN="LEFT"/>
+    displayExercise(exercise: MeasurementExercise)()<BR ALIGN="LEFT"/>
+    displayFeedback(feedback: FeedbackMessage)()<BR ALIGN="LEFT"/>
+    updateProgressDisplay(score, level, progressPercent)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameEngine -> UserProfile [label="\"1 manages\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> GameLevel [label="\"1 current\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> GameConfiguration [label="\"1 uses\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> ExerciseGenerator [label="\"1 uses\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> ScoreManager [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> FeedbackSystem [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> RewardSystem [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> UIManager [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> UserProgressTracker [arrowhead=none arrowtail=diamond dir=forward]
+	GameLevel -> MeasurementDifficultyParams [label="\"1 defines\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameConfiguration -> MeasurementExerciseData [label="\"contains (DB)\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> GameConfiguration [label="\"uses (DB from)\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> MeasurementDifficultyParams [label="\"uses for generation\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> MeasurementExercise [label="\"creates\"" arrowhead=vee style=dashed]
+	MeasurementExercise -> MeasurementExerciseData [label="\"instantiates from\"" arrowhead=open style=dashed]
+	UIManager -> MeasurementExercise [label="\"displays\"" arrowhead=vee style=dashed]
+}

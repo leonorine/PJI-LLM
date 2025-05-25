@@ -1,0 +1,13 @@
+digraph Jeu_Mathematique_Sequence {
+	rankdir=TB size=10
+	User [label=Joueur shape=actor]
+	UI [label=UI shape=rectangle]
+	GameObj [label=Game shape=rectangle]
+	QuestionObj [label=Question shape=rectangle]
+	ProfileObj [label=PlayerProfile shape=rectangle]
+	User -> UI [label="Choisit mode / répond"]
+	UI -> GameObj [label="submitAnswer(choice)"]
+	GameObj -> QuestionObj [label="isCorrect()"]
+	GameObj -> ProfileObj [label="updateProgress()"]
+	GameObj -> UI [label="Afficher score/question"]
+}

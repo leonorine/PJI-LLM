@@ -1,0 +1,57 @@
+
+@startuml Instance_Multiplication_Division
+
+' Configuration générale
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+' Définition des classes spécifiques
+class OperationsAvancees {
+  + conceptCle: "Multiplication et division"
+  + sousConceptsAssocies: [tables, groupements]
+  + ageRecommande: 8-10 ans
+  + prerequis: [addition, soustraction]
+  --
+  + genererMultiplication(difficulte)
+  + genererDivision(difficulte)
+  + evaluerResultat(reponse)
+}
+
+class ExerciceTablesMD {
+  + type: "tables"
+  + difficulte: 1-5
+  + contenu: {facteur1, operateur, facteur2}
+  + reponseAttendue: produit/quotient
+  --
+  + afficherOperation()
+  + proposerChoixMultiples()
+}
+
+class FeedbackVisuel {
+  + type: "graphique"
+  + contenu: représentation visuelle
+  + indiceAssocie: aide visuelle
+  --
+  + montrerGroupements()
+  + expliquerErreur()
+}
+
+class ProgressionTables {
+  + niveauActuel: 1-12
+  + objectifs: mémorisation des tables
+  + cheminParcours: séquentiel par table
+  --
+  + debloquerNouvelleTable()
+  + reviserTablesProblematiques()
+}
+
+' Relations entre les classes
+OperationsAvancees --> ExerciceTablesMD : génère
+ExerciceTablesMD --> FeedbackVisuel : produit
+FeedbackVisuel --> ProgressionTables : informe
+ProgressionTables --> OperationsAvancees : ajuste
+
+@enduml

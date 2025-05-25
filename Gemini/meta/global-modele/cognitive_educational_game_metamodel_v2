@@ -1,0 +1,109 @@
+// High-Level Cognitive Metamodel V2
+digraph CognitiveEducationalGameMetamodel_V2 {
+	node [shape=plain]
+	edge [fontname=Helvetica fontsize=9 len=2.2 minlen=2.0 style=dashed]
+	compound=true concentrate=true fontname=Helvetica fontsize=11 nodesep=1.2 overlap=false rankdir=TB ranksep=1.8 splines=spline
+	LearnerCognitiveModel [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Dynamic Learner State&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearnerCognitiveModel</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">KnowledgeState (LCs)</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">SkillSet (COs)</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">MetacognitiveAwareness</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">MotivationalProfile</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">WorkingMemoryCapacity</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Represents the learner's current internal state</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	LearningConstruct [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Unit of Learning&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearningConstruct</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">abstractionLevel</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">complexityScore</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">interdependencies</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Defines WHAT is to be learned (Concept, Skill, Fact, Procedure)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	CognitiveOperation [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Mental Action&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>CognitiveOperation</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">operationName (e.g., Recall, Application, Analysis, Comparison)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Defines HOW the learner processes information</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	LearningInteractionPattern [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcoral">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Pedagogical Interaction Design&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearningInteractionPattern</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">patternName (e.g., DiscriminationTask, RuleApplicationTask)</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">targetCognitiveOperations (List[CO])</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Structures HOW learning interaction occurs</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Abstract Components: StimulusGenerator, ResponseModality, EvaluationOracle, FeedbackMechanism</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	PedagogicalStrategy [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="khaki">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Guiding Framework&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>PedagogicalStrategy</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">scaffoldingApproach</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">adaptivityLogic</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">motivationalDesign</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">errorManagement</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Governs the overall learning experience</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Embodies PedagogicalInvariants</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	AbstractionTransformationProcess [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="powderblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Meta-Process&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AbstractionTransformationProcess</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Operationalization</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">RepresentationChoice</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Contextualization</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">ParameterizationForDifficulty</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Transforms abstract LCs into concrete, playable experiences</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	PedagogicalInvariant [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgrey">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Universal Principle&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>PedagogicalInvariant</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Dimensions / Attributes:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">principleName (e.g., Active Engagement, Constructive Feedback)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <FONT POINT-SIZE="10"><B>Core Processes / Role:</B></FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">Fundamental truths of effective learning</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	PedagogicalStrategy -> LearnerCognitiveModel [label="\"guides adaptation to\"" arrowhead=vee labelfontcolor=blue]
+	PedagogicalStrategy -> LearningConstruct [label="\"guides selection/sequencing of\"" arrowhead=vee labelfontcolor=blue]
+	PedagogicalStrategy -> LearningInteractionPattern [label="\"guides selection/configuration of\"" arrowhead=vee labelfontcolor=blue]
+	PedagogicalStrategy -> PedagogicalInvariant [label="\"embodies\"" arrowhead=empty color=gray dir=back]
+	LearnerCognitiveModel -> LearningConstruct [label="\"reflects understanding of\"" arrowhead=none color=purple headlabel="*" style=dotted taillabel="*"]
+	LearnerCognitiveModel -> CognitiveOperation [label="\"reflects proficiency in\"" arrowhead=none color=purple headlabel="*" style=dotted taillabel="*"]
+	LearningInteractionPattern -> CognitiveOperation [label="\"engages\"" arrowhead=vee color=darkgreen]
+	LearningInteractionPattern -> LearnerCognitiveModel [label="\"influences (via interaction)\"" arrowhead=vee color=darkgreen]
+	AbstractionTransformationProcess -> LearningConstruct [label="\"operationalizes & represents\"" arrowhead=vee color=darkorange]
+	AbstractionTransformationProcess -> LearningInteractionPattern [label="\"applies to generate stimulus for\"" arrowhead=vee color=darkorange]
+	LearningConstruct -> CognitiveOperation [label="\"requires/develops\"" arrowhead=vee color=sienna constraint=false style=solid]
+}

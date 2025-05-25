@@ -1,0 +1,244 @@
+// Unified Metamodel for Educational Games
+digraph UnifiedEducationalGameMetamodel {
+	node [fontname=Helvetica fontsize=10 shape=plain]
+	edge [fontname=Helvetica fontsize=9 len=2.0 minlen=1.5]
+	compound=true concentrate=true nodesep=0.8 overlap=false rankdir=TB ranksep=1.5 splines=spline
+	EducationalGameShell [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="khaki">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Abstract Shell&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>EducationalGameShell</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    targetAudience: String<BR ALIGN="LEFT"/>
+    overallLearningGoals: List&lt;String&gt;<BR ALIGN="LEFT"/>
+    gameTheme?: GameTheme<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    initializeGame()<BR ALIGN="LEFT"/>
+    startGameLoop()<BR ALIGN="LEFT"/>
+    endGame()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	subgraph cluster_learning_structure {
+		color=lightgrey fontcolor=black label="Learning Structure Layer" style=filled
+		LearningDomain [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Concept&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearningDomain</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    domainName: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+		LearningTopic [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Concept&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearningTopic</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    topicName: String<BR ALIGN="LEFT"/>
+    prerequisites?: List&lt;LearningObjective|LearningTopic&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+		LearningObjective [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Concept&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>LearningObjective</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    objectiveID: String<BR ALIGN="LEFT"/>
+    description: String<BR ALIGN="LEFT"/>
+    measurableCriteria: String<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_game_activity {
+		color=lightgrey fontcolor=black label="Game Activity & Difficulty Layer" style=filled
+		GameActivityBlueprint [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightcoral">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Template&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>GameActivityBlueprint</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    activityID: String<BR ALIGN="LEFT"/>
+    targetedObjectives: List&lt;LearningObjective&gt;<BR ALIGN="LEFT"/>
+    allowedExerciseTypes: List&lt;ExerciseType&gt;<BR ALIGN="LEFT"/>
+    difficultyProfileSchema: DifficultyProfileSchema<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    setupActivity()<BR ALIGN="LEFT"/>
+    concludeActivity()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		DifficultyProfileSchema [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="powderblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Schema&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>DifficultyProfileSchema</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    schemaID: String<BR ALIGN="LEFT"/>
+    parameterDefinitions: Map&lt;String, ParameterType&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+		DifficultyProfileInstance [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="powderblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Instance&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>DifficultyProfileInstance</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    profileID: String<BR ALIGN="LEFT"/>
+    values: Map&lt;String, Any&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_exercise_structure {
+		color=lightgrey fontcolor=black label="Exercise Structure Layer" style=filled
+		ExerciseType [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Abstract Type&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ExerciseType</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    typeName: String<BR ALIGN="LEFT"/>
+    interactionPattern: String<BR ALIGN="LEFT"/>
+    presentationFormatSchema: Schema<BR ALIGN="LEFT"/>
+    solutionFormatSchema: Schema<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+		ExerciseContentSource [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="moccasin">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Abstract Source&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ExerciseContentSource</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    sourceType: String (DB, Algo, File)<BR ALIGN="LEFT"/>
+    domainSpecificSchema: Schema<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    getContent(params): Any()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		ExerciseGenerator [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="moccasin">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Component&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ExerciseGenerator</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    supportedExerciseTypes: List&lt;ExerciseType&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    generateExercise(type, contentSource, difficulty): ExerciseInstance()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		ExerciseInstance [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Playable Unit&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ExerciseInstance</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    instanceID: String<BR ALIGN="LEFT"/>
+    presentationData: ConcreteData<BR ALIGN="LEFT"/>
+    solutionData: ConcreteData<BR ALIGN="LEFT"/>
+    originatingType: ExerciseType<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    present()<BR ALIGN="LEFT"/>
+    evaluateAnswer(userAnswer): EvaluationResult()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_game_flow_feedback {
+		color=lightgrey fontcolor=black label="Game Flow & Feedback Layer" style=filled
+		ProgressionLogic [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightskyblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Strategy&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ProgressionLogic</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    strategyType: String (Linear, Adaptive, Mastery)<BR ALIGN="LEFT"/>
+    rules: List&lt;Rule&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    determineNext(performance): NextStep()<BR ALIGN="LEFT"/>
+    adaptDifficulty(performance): DifficultyProfileInstance()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		FeedbackStrategy [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Strategy&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>FeedbackStrategy</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    timing: String (Immediate, Delayed)<BR ALIGN="LEFT"/>
+    style: String (Simple, Explanatory, Hinted)<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    generateFeedback(evaluationResult, context): FeedbackContent()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		EvaluationCriteria [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Definition&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>EvaluationCriteria</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    metricName: String<BR ALIGN="LEFT"/>
+    unit: String<BR ALIGN="LEFT"/>
+    thresholds?: Map&lt;String, Any&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+		FeedbackContent [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Data&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>FeedbackContent</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    message: String<BR ALIGN="LEFT"/>
+    type: String<BR ALIGN="LEFT"/>
+    visuals?: List&lt;String&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_user_profile {
+		color=lightgrey fontcolor=black label="User Profile Layer" style=filled
+		UserProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Data Store&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>UserProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    userID: String<BR ALIGN="LEFT"/>
+    preferences: Map<BR ALIGN="LEFT"/>
+    currentProgress: Map&lt;LearningObjective, Float&gt;<BR ALIGN="LEFT"/>
+    performanceHistory: List&lt;PerformanceRecord&gt;<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/>
+    load()<BR ALIGN="LEFT"/>
+    save()<BR ALIGN="LEFT"/>
+    updatePerformance(record)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		PerformanceRecord [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="10" COLOR="dimgray">&lt;&lt;Data&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>PerformanceRecord</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributes:</B><BR ALIGN="LEFT"/>
+    exerciseID: String<BR ALIGN="LEFT"/>
+    timestamp: DateTime<BR ALIGN="LEFT"/>
+    evaluationResults: Map&lt;EvaluationCriteria, Any&gt;<BR ALIGN="LEFT"/>
+    isCorrect: Boolean<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BGCOLOR="white"><B>Responsibilities/Methods:</B><BR ALIGN="LEFT"/> </TD></TR>
+</TABLE>>]
+	}
+	EducationalGameShell -> LearningDomain [label="\"1..*\" has" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> ProgressionLogic [label="\"1\" uses" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> FeedbackStrategy [label="\"1\" defines" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> EvaluationCriteria [label="\"1..*\" defines" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> GameActivityBlueprint [label="\"1..*\" defines" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> ExerciseGenerator [label="\"1\" employs" arrowhead=none arrowtail=diamond dir=forward]
+	EducationalGameShell -> UserProfile [label="\"1..*\" manages" arrowhead=none arrowtail=odiamond dir=forward]
+	LearningDomain -> LearningTopic [label="\"1..*\" contains" arrowhead=none arrowtail=diamond dir=forward]
+	LearningTopic -> LearningObjective [label="\"1..*\" details" arrowhead=none arrowtail=diamond dir=forward]
+	GameActivityBlueprint -> LearningObjective [label="\"1..*\" targets" arrowhead=vee style=dashed]
+	GameActivityBlueprint -> ExerciseType [label="\"1..*\" allows" arrowhead=vee style=dashed]
+	GameActivityBlueprint -> DifficultyProfileSchema [label="\"1\" uses" arrowhead=none arrowtail=diamond dir=forward]
+	DifficultyProfileInstance -> DifficultyProfileSchema [label="\"instantiates\"" arrowhead=empty dir=back style=dashed]
+	ExerciseGenerator -> ExerciseType [label="\"supports\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> ExerciseContentSource [label="\"uses\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> DifficultyProfileInstance [label="\"configured by\"" arrowhead=vee style=dashed]
+	ExerciseGenerator -> ExerciseInstance [label="\"creates\"" arrowhead=vee style=dashed]
+	ExerciseInstance -> ExerciseType [label="\"is an instance of\"" arrowhead=empty dir=back style=dashed]
+	ProgressionLogic -> GameActivityBlueprint [label="\"selects next\"" arrowhead=vee style=dashed]
+	ProgressionLogic -> DifficultyProfileInstance [label="\"adapts\"" arrowhead=vee style=dashed]
+	ProgressionLogic -> UserProfile [label="\"uses performance from\"" arrowhead=vee style=dashed]
+	FeedbackStrategy -> FeedbackContent [label="\"generates\"" arrowhead=vee style=dashed]
+	FeedbackStrategy -> ExerciseInstance [label="\"based on evaluation of\"" arrowhead=vee style=dashed]
+	ExerciseInstance -> EvaluationCriteria [label="\"evaluated against\"" arrowhead=vee style=dashed]
+	UserProfile -> PerformanceRecord [label="\"*\" logs" arrowhead=none arrowtail=diamond dir=forward]
+	PerformanceRecord -> EvaluationCriteria [label="\"records for\"" arrowhead=vee style=dashed]
+	UserProfile -> LearningObjective [label="\"tracks mastery of\"" arrowhead=vee style=dashed]
+}

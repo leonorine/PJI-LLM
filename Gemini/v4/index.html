@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari des Mesures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Safari des Mesures</h1>
+        <div class="progress-bar-container">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <p>Score: <span id="score">0</span> | Niveau: <span id="level">1</span></p>
+    </header>
+
+    <main>
+        <div id="animal-display">
+            <img id="animal-image" src="images/placeholder_animal.png" alt="Animal du Safari">
+            <p id="animal-fact">Bienvenue au Safari des Mesures !</p>
+        </div>
+
+        <div id="question-area">
+            <p id="question-text">Chargement de la question...</p>
+            <img id="question-image" src="" alt="Illustration question" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+        </div>
+
+        <div id="options-area">
+        </div>
+
+        <div id="feedback-area">
+            <p id="feedback-text"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Jeu Éducatif Safari des Mesures</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+// Conceptual Model for Math Safari Game
+digraph MathSafariConceptualModel {
+	node [fontname=Helvetica fontsize=10 shape=plain]
+	edge [fontname=Helvetica fontsize=9]
+	nodesep=0.8 rankdir=TB ranksep=0.8 splines=ortho
+	GameEngine [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>GameEngine</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +User currentUser<BR ALIGN="LEFT"/>
+    +Level currentLevel<BR ALIGN="LEFT"/>
+    +GameSettings settings<BR ALIGN="LEFT"/>
+    +ScoreKeeper scoreKeeper<BR ALIGN="LEFT"/>
+    +ProgressTracker progressTracker<BR ALIGN="LEFT"/>
+    +ProblemFactory problemFactory<BR ALIGN="LEFT"/>
+    +FeedbackController feedbackController<BR ALIGN="LEFT"/>
+    +RewardController rewardController<BR ALIGN="LEFT"/>
+    +UIController uiController<BR ALIGN="LEFT"/>
+    +List[MathOperation] activeOperations<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +startGame()<BR ALIGN="LEFT"/>
+    +requestNextProblem()<BR ALIGN="LEFT"/>
+    +submitUserAnswer(answer: string)()<BR ALIGN="LEFT"/>
+    +advanceLevel()<BR ALIGN="LEFT"/>
+    +setOperations(operations: List[OperationType])()<BR ALIGN="LEFT"/>
+    +getCurrentDifficulty() : DifficultyProfile()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	User [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>User</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +string userId<BR ALIGN="LEFT"/>
+    +string userName<BR ALIGN="LEFT"/>
+    +UserPreferences preferences<BR ALIGN="LEFT"/>
+    +UserProfile profile<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	UserPreferences [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>UserPreferences</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +string visualTheme (e.g., "safari", "space")<BR ALIGN="LEFT"/>
+    +boolean soundEffectsEnabled<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	UserProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>UserProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int currentLevelId<BR ALIGN="LEFT"/>
+    +int totalScore<BR ALIGN="LEFT"/>
+    +Map[OperationType, OperationMetrics] operationMetrics<BR ALIGN="LEFT"/>
+    +Map[int, LevelAttempt] levelAttemptsLog<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	OperationMetrics [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>OperationMetrics</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int problemsAttempted<BR ALIGN="LEFT"/>
+    +int correctAnswers<BR ALIGN="LEFT"/>
+    +float averageTimeSeconds<BR ALIGN="LEFT"/>
+    +List[float] accuracyHistory (e.g., last 10 attempts)<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	LevelAttempt [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>LevelAttempt</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int levelId<BR ALIGN="LEFT"/>
+    +int scoreAchieved<BR ALIGN="LEFT"/>
+    +boolean isCompleted<BR ALIGN="LEFT"/>
+    +DateTime attemptTimestamp<BR ALIGN="LEFT"/>
+    +List[ProblemRecord] problemRecords<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	ProblemRecord [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>ProblemRecord</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +string problemStatement<BR ALIGN="LEFT"/>
+    +string userAnswer<BR ALIGN="LEFT"/>
+    +string correctAnswer<BR ALIGN="LEFT"/>
+    +boolean wasCorrect<BR ALIGN="LEFT"/>
+    +int timeTakenSeconds<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	Level [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Level</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int levelId<BR ALIGN="LEFT"/>
+    +string levelName<BR ALIGN="LEFT"/>
+    +int targetCorrectAnswersToPass<BR ALIGN="LEFT"/>
+    +int questionsCompletedInLevel<BR ALIGN="LEFT"/>
+    +DifficultyProfile difficultyProfile<BR ALIGN="LEFT"/>
+    +List[OperationType] allowedOperations<BR ALIGN="LEFT"/>
+    +Reward rewardForCompletion<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	DifficultyProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>DifficultyProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int minOperandValue<BR ALIGN="LEFT"/>
+    +int maxOperandValue<BR ALIGN="LEFT"/>
+    +int numberOfOperands<BR ALIGN="LEFT"/>
+    +boolean allowNegativeResults<BR ALIGN="LEFT"/>
+    +Map[string, any] operationSpecificConfigs<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	Problem [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Problem</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +List[number] operands<BR ALIGN="LEFT"/>
+    +MathOperation operation<BR ALIGN="LEFT"/>
+    +number correctAnswer<BR ALIGN="LEFT"/>
+    +string questionAsString<BR ALIGN="LEFT"/>
+    +float assignedDifficultyScore<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	MathOperation [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><FONT POINT-SIZE="10">&lt;&lt;Interface&gt;&gt;</FONT><BR/><B>MathOperation</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +OperationType type<BR ALIGN="LEFT"/>
+    +string displaySymbol<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +calculateResult(operands: List[number]) : number()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile: DifficultyProfile) : List[number]()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands: List[number]) : string()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Addition [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Addition</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +OperationType type = OperationType.ADDITION<BR ALIGN="LEFT"/>
+    +string displaySymbol = "+"<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +calculateResult(operands)()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile)()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Subtraction [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Subtraction</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +OperationType type = OperationType.SUBTRACTION<BR ALIGN="LEFT"/>
+    +string displaySymbol = "-"<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +calculateResult(operands)()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile)()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Multiplication [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Multiplication</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +OperationType type = OperationType.MULTIPLICATION<BR ALIGN="LEFT"/>
+    +string displaySymbol = "×"<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +calculateResult(operands)()<BR ALIGN="LEFT"/>
+    +generateOperandsForDifficulty(profile)()<BR ALIGN="LEFT"/>
+    +formatQuestionText(operands)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	OperationType [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><FONT POINT-SIZE="10">&lt;&lt;enumeration&gt;&gt;</FONT><BR/><B>OperationType</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    ADDITION<BR ALIGN="LEFT"/>
+    SUBTRACTION<BR ALIGN="LEFT"/>
+    MULTIPLICATION<BR ALIGN="LEFT"/>
+    DIVISION<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ProblemFactory [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>ProblemFactory</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +DifficultyAdaptationEngine adaptationEngine<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +generateNewProblem(level: Level, activeOps: List[MathOperation]) : Problem()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	DifficultyAdaptationEngine [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>DifficultyAdaptationEngine</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +adaptProfileBasedOnPerformance(currentProfile: DifficultyProfile, userProfile: UserProfile) : DifficultyProfile()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	ScoreKeeper [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>ScoreKeeper</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int currentSessionScore<BR ALIGN="LEFT"/>
+    +int pointsPerCorrect<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +recordCorrectAnswer()<BR ALIGN="LEFT"/>
+    +recordIncorrectAnswer()<BR ALIGN="LEFT"/>
+    +resetSessionScore()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	FeedbackController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>FeedbackController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +generateUserFeedback(isCorrect: boolean, correctAnswer?: number, problemContext?: Problem) : Feedback()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Feedback [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Feedback</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +string messageText<BR ALIGN="LEFT"/>
+    +FeedbackType type<BR ALIGN="LEFT"/>
+    +string visualIndicator<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	FeedbackType [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><FONT POINT-SIZE="10">&lt;&lt;enumeration&gt;&gt;</FONT><BR/><B>FeedbackType</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    ENCOURAGEMENT_CORRECT<BR ALIGN="LEFT"/>
+    HINT_INCORRECT<BR ALIGN="LEFT"/>
+    SHOW_SOLUTION<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	RewardController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>RewardController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +List[Reward] allPossibleRewards<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +assignRewardForLevel(level: Level) : Reward()<BR ALIGN="LEFT"/>
+    +unlockRewardForUser(user: User, reward: Reward)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	Reward [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>Reward</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +string rewardId<BR ALIGN="LEFT"/>
+    +string rewardName<BR ALIGN="LEFT"/>
+    +string visualAssetPath<BR ALIGN="LEFT"/>
+    +string descriptiveText<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	ProgressTracker [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>ProgressTracker</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +loadUserProfile(userId: string) : UserProfile()<BR ALIGN="LEFT"/>
+    +saveUserProfile(user: User)()<BR ALIGN="LEFT"/>
+    +logProblemAttempt(user: User, levelId: int, problem: Problem, userAnswer: string, isCorrect: boolean, timeTaken: int)()<BR ALIGN="LEFT"/>
+    +getOverallUserStats(userProfile: UserProfile) : object()<BR ALIGN="LEFT"/>
+    +getStatsForOperation(userProfile: UserProfile, opType: OperationType) : OperationMetrics()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	UIController [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>UIController</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +renderProblem(problem: Problem)()<BR ALIGN="LEFT"/>
+    +renderFeedback(feedback: Feedback)()<BR ALIGN="LEFT"/>
+    +updateScoreDisplay(score: int)()<BR ALIGN="LEFT"/>
+    +updateLevelDisplay(levelName: string)()<BR ALIGN="LEFT"/>
+    +renderReward(reward: Reward)()<BR ALIGN="LEFT"/>
+    +renderProgressReport(stats: object)()<BR ALIGN="LEFT"/>
+    +captureUserInput() : string()<BR ALIGN="LEFT"/>
+    +showLevelProgressBar(completed: int, total: int)()<BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	GameSettings [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR><TD ALIGN="CENTER" COLSPAN="2"><B>GameSettings</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT">
+    +int startingLevelId<BR ALIGN="LEFT"/>
+    +List[OperationType] defaultEnabledOperations<BR ALIGN="LEFT"/>
+    +Map[int, Level] levelDefinitions<BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2"> </TD></TR>
+</TABLE>>]
+	GameEngine -> User [label="\"1\"" arrowhead=none arrowtail=diamond constraint=true dir=forward]
+	GameEngine -> Level [label="\"manages current\"" arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> GameSettings [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> ScoreKeeper [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> ProgressTracker [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> ProblemFactory [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> FeedbackController [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> RewardController [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> UIController [arrowhead=none arrowtail=diamond dir=forward]
+	GameEngine -> MathOperation [label="\"* uses active\"" arrowhead=none arrowtail=odiamond dir=forward]
+	User -> UserPreferences [label="\"1\"" arrowhead=none arrowtail=diamond dir=forward]
+	User -> UserProfile [label="\"1\"" arrowhead=none arrowtail=diamond dir=forward]
+	UserProfile -> OperationMetrics [label="\"* Map\"" arrowhead=none arrowtail=diamond dir=forward]
+	UserProfile -> LevelAttempt [label="\"* Map\"" arrowhead=none arrowtail=diamond dir=forward]
+	LevelAttempt -> ProblemRecord [label="\"* List\"" arrowhead=none arrowtail=diamond dir=forward]
+	Level -> DifficultyProfile [label="\"1\"" arrowhead=none arrowtail=diamond dir=forward]
+	Level -> Reward [label="\"0..1 offers\"" arrowhead=none arrowtail=diamond dir=forward]
+	Problem -> MathOperation [label="\"1\"" arrowhead=none arrowtail=diamond dir=forward]
+	Addition -> MathOperation [arrowhead=empty dir=forward]
+	Subtraction -> MathOperation [arrowhead=empty dir=forward]
+	Multiplication -> MathOperation [arrowhead=empty dir=forward]
+	ProblemFactory -> DifficultyAdaptationEngine [label="\"1\"" arrowhead=none arrowtail=diamond dir=forward]
+	ProblemFactory -> Level [label="\"uses\"" arrowhead=vee style=dashed]
+	ProblemFactory -> MathOperation [label="\"uses\"" arrowhead=vee style=dashed]
+	ProblemFactory -> DifficultyProfile [label="\"uses\"" arrowhead=vee style=dashed]
+	DifficultyAdaptationEngine -> UserProfile [label="\"analyzes\"" arrowhead=vee style=dashed]
+	DifficultyAdaptationEngine -> DifficultyProfile [label="\"uses/returns\"" arrowhead=vee style=dashed]
+	ProgressTracker -> UserProfile [label="\"manages\"" arrowhead=vee style=dashed]
+	ProgressTracker -> ProblemRecord [label="\"logs\"" arrowhead=vee style=dashed]
+	ProgressTracker -> User [label="\"uses\"" arrowhead=vee style=dashed]
+	ProgressTracker -> Problem [label="\"uses for logging\"" arrowhead=vee style=dashed]
+	ProgressTracker -> OperationMetrics [label="\"updates\"" arrowhead=vee style=dashed]
+	GameSettings -> Level [label="\"defines structure of (Map)\"" arrowhead=vee]
+	MathOperation -> OperationType [label="\"has a type\"" arrowhead=vee style=dashed]
+	Level -> OperationType [label="\"uses (List)\"" arrowhead=vee style=dashed]
+	GameSettings -> OperationType [label="\"uses (List)\"" arrowhead=vee style=dashed]
+	GameEngine -> OperationType [label="\"uses (List)\"" arrowhead=vee style=dashed]
+	GameEngine -> DifficultyProfile [label="\"uses for return\"" arrowhead=vee style=dashed]
+	FeedbackController -> Feedback [label="\"generates\"" arrowhead=vee style=dashed]
+	FeedbackController -> Problem [label="\"uses context\"" arrowhead=vee style=dashed]
+	Feedback -> FeedbackType [label="\"has a type\"" arrowhead=vee style=dashed]
+	UIController -> Problem [label="\"renders\"" arrowhead=vee style=dashed]
+	UIController -> Feedback [label="\"renders\"" arrowhead=vee style=dashed]
+	UIController -> Reward [label="\"renders\"" arrowhead=vee style=dashed]
+	UIController -> Level [label="\"uses for display\"" arrowhead=vee style=dashed]
+	RewardController -> Reward [label="\"manages (List)\"" arrowhead=vee style=dashed]
+	RewardController -> Level [label="\"uses\"" arrowhead=vee style=dashed]
+	RewardController -> User [label="\"uses\"" arrowhead=vee style=dashed]
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Addition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Safari Addition</h1>
+        <div class="progress-bar">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <p>Score: <span id="score">0</span> | Niveau: <span id="level">1</span></p>
+    </header>
+
+    <main>
+        <div id="animal-display">
+            <img id="animal-image" src="images/placeholder.png" alt="Animal du Safari">
+            <p id="animal-fact"></p>
+        </div>
+
+        <div id="problem-area">
+            <span id="num1"></span> + <span id="num2"></span> = ?
+        </div>
+
+        <div id="answer-area">
+            <input type="number" id="answer-input" autofocus>
+            <button id="submit-button">Répondre</button>
+        </div>
+
+        <div id="feedback-area">
+            <p id="feedback-text"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Jeu Éducatif Safari Addition</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
