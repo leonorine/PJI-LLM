@@ -109,3 +109,48 @@ footer {
     font-size: 0.95em;
     margin-top: 2em;
 }
+
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    .llm-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8em;
+    }
+    .llm-btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 0.8em 0;
+    }
+    nav ul {
+        gap: 0.3em;
+    }
+    nav li {
+        font-size: 0.85em;
+        padding: 0.4em 0.8em;
+    }
+    main {
+        padding: 1em;
+    }
+    .presentation {
+        padding: 0.8em;
+    }
+    iframe#app-viewer {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    iframe#app-viewer {
+        min-height: 280px;
+    }
+    header h1 {
+        font-size: 1.3em;
+    }
+    .llm-btn {
+        max-width: 220px;
+    }
+}
