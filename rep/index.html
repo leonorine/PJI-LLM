@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>PJI-LLM – Explorateur d’Applications LLM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>PJI-LLM – Explorateur d’Applications Générées par LLM</h1>
+    <nav>
+        <ul id="version-tabs">
+            <li data-version="v1" class="active">Version 1</li>
+            <li data-version="v2">Version 2</li>
+            <li data-version="v3">Version 3</li>
+            <li data-version="v4">Version 4</li>
+            <li data-version="v5">Version 5</li>
+            <li data-version="v6">Version 6</li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section class="presentation">
+        <h2>Bienvenue !</h2>
+        <p>
+            Cette plateforme vous permet d’explorer toutes les applications web générées automatiquement par les LLM dans le cadre du projet PJI-LLM.<br>
+            Sélectionnez une version, puis un LLM pour découvrir et utiliser chaque application.<br>
+            <strong>Structure du projet :</strong> <code>PJI-LLM/LLM/vX/index.html</code>
+        </p>
+        <ul>
+            <li>Chaque version correspond à une étape du projet </li>
+            <li>Les LLM testés sont : <b>ChatGPT</b>, <b>Gemini</b> et <b>Perplexity</b></li>
+        </ul>
+    </section>
+    <section id="llm-select-section">
+        <h2 id="selected-version-title">Version 1</h2>
+        <div class="llm-buttons">
+            <button class="llm-btn" data-llm="ChatGPT">ChatGPT</button>
+            <button class="llm-btn" data-llm="Gemini">Gemini</button>
+            <button class="llm-btn" data-llm="Perplexity">Perplexity</button>
+        </div>
+    </section>
+    <section id="app-viewer-section">
+        <iframe id="app-viewer" src="../ChatGPT/v1/index.html" frameborder="0"></iframe>
+    </section>
+</main>
+<footer>
+    <p>Projet M1 Informatique – 2025 – Leonorine Tibere</p>
+    <p>Code source : <a href="https://github.com/leonorine/PJI-LLM" target="_blank">GitHub</a></p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

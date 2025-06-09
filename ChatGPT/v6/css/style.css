@@ -1,0 +1,25 @@
+
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 2em;
+}
+.menu button {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 16px;
+}
+#game-container {
+    margin-top: 2em;
+}
+button.choice {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+.feedback {
+    font-weight: bold;
+    margin-top: 10px;
+}

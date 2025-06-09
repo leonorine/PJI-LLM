@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari des Atomes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Safari des Atomes</h1>
+        <div class="progress-bar-container">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <p>Score: <span id="score">0</span> | Niveau: <span id="level">1</span></p>
+    </header>
+
+    <main>
+        <div id="lab-assistant-display">
+            <img id="assistant-image" src="images/assistant_chimiste.png" alt="Assistant Chimiste">
+            <p id="assistant-fact">Prêt à découvrir les éléments ?</p>
+        </div>
+
+        <div id="challenge-area">
+            <p id="challenge-question-text">Chargement du défi...</p>
+            <img id="element-image-display" src="" alt="Image de l'élément" style="display:none;">
+        </div>
+
+        <div id="options-area">
+        </div>
+
+        <div id="feedback-area">
+            <p id="feedback-text"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Laboratoire Ludo-Éducatif</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

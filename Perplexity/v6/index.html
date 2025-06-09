@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Plateforme Jeux Pédagogiques</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f8fa; margin: 0; }
+        header { background: #1976d2; color: #fff; padding: 16px 0; text-align: center; }
+        main { max-width: 600px; margin: 32px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 24px; }
+        .menu { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; }
+        .menu button { padding: 10px 20px; border-radius: 8px; border: none; background: #e3e8ee; cursor: pointer; font-size: 16px; }
+        .menu button.active { background: #1976d2; color: #fff; }
+        .question { font-size: 1.2em; margin: 24px 0 12px; }
+        .options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .options button { padding: 12px 22px; border-radius: 8px; border: none; background: #e3e8ee; cursor: pointer; font-size: 16px; }
+        .options button.correct { background: #43a047; color: #fff; }
+        .options button.incorrect { background: #e53935; color: #fff; }
+        .feedback { min-height: 24px; margin: 18px 0; font-weight: bold; }
+        .progress { font-size: 15px; margin-bottom: 8px; }
+        .score { font-size: 17px; margin-bottom: 20px; }
+        #nextBtn { margin-top: 12px; padding: 8px 20px; border-radius: 8px; background: #1976d2; color: #fff; border: none; font-size: 16px; cursor: pointer; }
+        #nextBtn:disabled { background: #b0bec5; cursor: default; }
+        #astroImg { max-width: 90%; border-radius: 8px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Plateforme Jeux Pédagogiques</h1>
+</header>
+<main>
+    <nav class="menu">
+        <button id="mathBtn" class="active">Mathématiques</button>
+        <button id="gramBtn">Grammaire</button>
+        <button id="mesureBtn">Grandeurs & Mesures</button>
+        <button id="astroBtn">Astronomie</button>
+    </nav>
+    <div class="score" id="score"></div>
+    <div class="progress" id="progress"></div>
+    <div class="question" id="question"></div>
+    <img id="astroImg" src="" alt="" style="display:none;">
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <button id="nextBtn" disabled>Question suivante</button>
+</main>
+<script>
+    // 1. Règles unifiées (même structure pour tous les jeux)
+    const RULES = {
+        math: [
+            {
+                id: "math_correct_answer",
+                description: "Vérifier si la réponse est correcte",
+                conditions: ["userAnswer == expectedAnswer"],
+                actions: ["showPositiveFeedback", "incrementScore", "nextQuestion"],
+                priorite: 1,
+                jeu: "math"
+            },
+            {
+                id: "math_incorrect_answer",
+                description: "Réponse incorrecte, encourager à réessayer",
+                conditions: ["userAnswer != expectedAnswer"],
+                actions: ["showNegativeFeedback"],
+                priorite: 2,
+                jeu: "math"
+            }
+        ],
+        grammaire: [
+            {
+                id: "gram_correct_answer",
+                description: "Réponse correcte à la question d'orthographe",
+                conditions: ["userAnswer == expectedAnswer"],
+                actions: ["showPositiveFeedback", "incrementScore", "nextQuestion"],
+                priorite: 1,
+                jeu: "grammaire"
+            },
+            {
+                id: "gram_incorrect_answer",
+                description: "Réponse incorrecte, montrer la bonne réponse",
+                conditions: ["userAnswer != expectedAnswer"],
+                actions: ["showNegativeFeedback", "showCorrectAnswer"],
+                priorite: 2,
+                jeu: "grammaire"
+            }
+        ],
+        mesures: [
+            {
+                id: "mesure_correct_answer",
+                description: "Réponse correcte à la question de mesure",
+                conditions: ["userAnswer == expectedAnswer"],
+                actions: ["showPositiveFeedback", "incrementScore", "nextQuestion"],
+                priorite: 1,
+                jeu: "mesures"
+            },
+            {
+                id: "mesure_incorrect_answer",
+                description: "Réponse incorrecte, afficher la bonne réponse",
+                conditions: ["userAnswer != expectedAnswer"],
+                actions: ["showNegativeFeedback", "showCorrectAnswer"],
+                priorite: 2,
+                jeu: "mesures"
+            }
+        ],
+        astronomie: [
+            {
+                id: "astro_correct_answer",
+                description: "Réponse correcte à la question d'astronomie",
+                conditions: ["userAnswer == expectedAnswer"],
+                actions: ["showPositiveFeedback", "incrementScore", "nextQuestion"],
+                priorite: 1,
+                jeu: "astronomie"
+            },
+            {
+                id: "astro_incorrect_answer",
+                description: "Réponse incorrecte, montrer la bonne réponse",
+                conditions: ["userAnswer != expectedAnswer"],
+                actions: ["showNegativeFeedback", "showCorrectAnswer"],
+                priorite: 2,
+                jeu: "astronomie"
+            }
+        ]
+    };
+
+    // 2. Données des jeux
+    const DATA = {
+        math: [
+            { prompt: "5 + 3 =", options: [8, 7, 9], answer: 8 },
+            { prompt: "9 - 6 =", options: [2, 3, 4], answer: 3 },
+            { prompt: "2 + 7 =", options: [8, 9, 10], answer: 9 },
+            { prompt: "8 - 2 =", options: [5, 7, 6], answer: 6 },
+            { prompt: "4 + 4 =", options: [8, 7, 9], answer: 8 }
+        ],
+        grammaire: [
+            { prompt: "Quel mot est bien orthographié ?", options: ["chien", "chiene", "chian"], answer: "chien" },
+            { prompt: "Quel mot est bien orthographié ?", options: ["maison", "maisson", "maizon"], answer: "maison" },
+            { prompt: "Quel mot est bien orthographié ?", options: ["arbre", "arbr", "arbrez"], answer: "arbre" },
+            { prompt: "Quel mot est bien orthographié ?", options: ["pomme", "pom", "pome"], answer: "pomme" },
+            { prompt: "Quel mot est bien orthographié ?", options: ["voiture", "voituer", "voitur"], answer: "voiture" }
+        ],
+        mesures: [
+            { prompt: "Quelle est la plus grande unité ?", options: ["cm", "m", "dm"], answer: "m" },
+            { prompt: "Combien de minutes dans une heure ?", options: ["60", "100", "24"], answer: "60" },
+            { prompt: "Quelle unité pour mesurer la masse d'une pomme ?", options: ["kg", "g", "L"], answer: "g" },
+            { prompt: "Combien de centimes dans 1 euro ?", options: ["10", "100", "1000"], answer: "100" },
+            { prompt: "Quelle unité pour mesurer la contenance d'une bouteille ?", options: ["L", "kg", "cm"], answer: "L" }
+        ],
+        astronomie: [
+            { prompt: "Quelle constellation est représentée ?", img: "orion.jpg", options: ["Orion", "Grande Ourse", "Andromède"], answer: "Orion" },
+            { prompt: "Quelle constellation est représentée ?", img: "ursa_major.jpg", options: ["Caelum", "Cassiopeia", "Grande Ourse"], answer: "Grande Ourse" },
+            { prompt: "Quelle constellation est représentée ?", img: "andromeda.jpg", options: ["Andromède", "Lyre", "Cygne"], answer: "Andromède" },
+            { prompt: "Quelle constellation est représentée ?", img: "lyra.jpg", options: ["Lyre", "Orion", "Cancer"], answer: "Lyre" },
+            { prompt: "Quelle constellation est représentée ?", img: "cygnus.jpg", options: ["Cassiopeia", "Cygne", "Hydre"], answer: "Cygne" },
+            { prompt: "Quelle constellation est représentée ?", img: "cassiopeia.jpg", options: ["Cassiopeia", "Taureau", "Scorpion"], answer: "Cassiopeia" },
+            { prompt: "Quelle constellation est représentée ?", img: "taurus.jpg", options: ["Taureau", "Poissons", "Lion"], answer: "Taureau" },
+            { prompt: "Quelle constellation est représentée ?", img: "leo.jpg", options: ["Bélier", "Lion", "Cancer"], answer: "Lion" }
+        ]
+    };
+
+    // 3. Moteur de règles
+    class RuleEngine {
+        constructor(rules) {
+            this.rules = rules.sort((a, b) => a.priorite - b.priorite);
+        }
+        evaluate(context) {
+            for (const rule of this.rules) {
+                if (rule.conditions.every(cond => this.evalCondition(cond, context))) {
+                    return rule.actions;
+                }
+            }
+            return [];
+        }
+        evalCondition(cond, ctx) {
+            return Function(...Object.keys(ctx), `return (${cond})`)(...Object.values(ctx));
+        }
+    }
+
+    // 4. Application principale
+    class GameApp {
+        constructor() {
+            this.game = "math";
+            this.data = DATA[this.game];
+            this.rules = new RuleEngine(RULES[this.game]);
+            this.index = 0;
+            this.score = 0;
+            this.initUI();
+            this.render();
+        }
+        initUI() {
+            this.scoreEl = document.getElementById("score");
+            this.progressEl = document.getElementById("progress");
+            this.questionEl = document.getElementById("question");
+            this.optionsEl = document.getElementById("options");
+            this.feedbackEl = document.getElementById("feedback");
+            this.nextBtn = document.getElementById("nextBtn");
+            this.astroImg = document.getElementById("astroImg");
+
+            document.getElementById("mathBtn").onclick = () => this.switchGame("math");
+            document.getElementById("gramBtn").onclick = () => this.switchGame("grammaire");
+            document.getElementById("mesureBtn").onclick = () => this.switchGame("mesures");
+            document.getElementById("astroBtn").onclick = () => this.switchGame("astronomie");
+            this.nextBtn.onclick = () => this.nextQuestion();
+        }
+        switchGame(game) {
+            if (this.game === game) return;
+            this.game = game;
+            document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
+            document.getElementById(
+                game === "math" ? "mathBtn" : game === "grammaire" ? "gramBtn" : game === "mesures" ? "mesureBtn" : "astroBtn"
+            ).classList.add("active");
+            this.data = DATA[this.game];
+            this.rules = new RuleEngine(RULES[this.game]);
+            this.index = 0;
+            this.score = 0;
+            this.render();
+        }
+        render() {
+            this.scoreEl.textContent = `Score : ${this.score} / ${this.data.length}`;
+            this.progressEl.textContent = `Question ${this.index + 1} / ${this.data.length}`;
+            const q = this.data[this.index];
+            this.questionEl.textContent = q.prompt;
+            // Gestion image pour astronomie
+            if (this.game === "astronomie" && q.img) {
+                this.astroImg.src = "images/" + q.img;
+                this.astroImg.style.display = "block";
+            } else {
+                this.astroImg.style.display = "none";
+            }
+            this.optionsEl.innerHTML = "";
+            this.feedbackEl.textContent = "";
+            this.nextBtn.disabled = true;
+            q.options
+                .slice().sort(() => Math.random() - 0.5)
+                .forEach(opt => {
+                    const btn = document.createElement("button");
+                    btn.textContent = opt;
+                    btn.onclick = () => this.handleAnswer(opt);
+                    this.optionsEl.appendChild(btn);
+                });
+        }
+        handleAnswer(userAnswer) {
+            const q = this.data[this.index];
+            const context = {
+                userAnswer: userAnswer,
+                expectedAnswer: q.answer
+            };
+            const actions = this.rules.evaluate(context);
+            this.applyActions(actions, userAnswer, q.answer);
+        }
+        applyActions(actions, userAnswer, expectedAnswer) {
+            const btns = Array.from(this.optionsEl.children);
+            for (const action of actions) {
+                if (action === "showPositiveFeedback") {
+                    this.feedbackEl.textContent = "Bravo !";
+                    btns.forEach(b => {
+                        if (b.textContent == expectedAnswer) b.classList.add("correct");
+                        else b.disabled = true;
+                    });
+                }
+                if (action === "showNegativeFeedback") {
+                    this.feedbackEl.textContent = "Essaie encore !";
+                    btns.forEach(b => {
+                        if (b.textContent == userAnswer) b.classList.add("incorrect");
+                        else b.disabled = true;
+                    });
+                }
+                if (action === "showCorrectAnswer") {
+                    btns.forEach(b => {
+                        if (b.textContent == expectedAnswer) b.classList.add("correct");
+                    });
+                }
+                if (action === "incrementScore") {
+                    this.score++;
+                }
+                if (action === "nextQuestion") {
+                    this.nextBtn.disabled = false;
+                }
+            }
+            if (!actions.includes("nextQuestion")) {
+                this.nextBtn.disabled = false;
+            }
+            btns.forEach(b => b.disabled = true);
+        }
+        nextQuestion() {
+            this.index++;
+            if (this.index >= this.data.length) {
+                this.questionEl.textContent = "Jeu terminé !";
+                this.astroImg.style.display = "none";
+                this.optionsEl.innerHTML = "";
+                this.feedbackEl.textContent = `Score final : ${this.score} / ${this.data.length}`;
+                this.progressEl.textContent = "";
+                this.nextBtn.disabled = true;
+            } else {
+                this.render();
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => new GameApp());
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    background: #f6f8fa;
+    color: #222;
+}
+
+header {
+    background: #1a237e;
+    color: #fff;
+    padding: 1em 0 0.5em 0;
+    text-align: center;
+    border-bottom: 4px solid #3949ab;
+}
+
+header h1 {
+    margin: 0.2em 0 0.5em 0;
+    font-size: 2em;
+}
+
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+nav li {
+    cursor: pointer;
+    padding: 0.5em 1.2em;
+    background: #3949ab;
+    border-radius: 6px 6px 0 0;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+nav li.active, nav li:hover {
+    background: #fff;
+    color: #1a237e;
+}
+
+main {
+    max-width: 900px;
+    margin: 2em auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 32px rgba(60,60,120,0.07);
+    padding: 2em 2.5em 2em 2.5em;
+}
+
+.presentation {
+    margin-bottom: 2em;
+    background: #e8eaf6;
+    border-radius: 8px;
+    padding: 1em 1.5em;
+}
+
+.llm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin: 1.5em 0;
+}
+
+.llm-btn {
+    padding: 0.7em 2.2em;
+    font-size: 1.1em;
+    background: #3949ab;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.llm-btn:hover, .llm-btn.active {
+    background: #1a237e;
+    transform: scale(1.06);
+}
+
+#app-viewer-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 2em;
+}
+
+#iframe-container {
+    width: 100%;
+}
+
+iframe#app-viewer {
+    width: 100%;
+    min-height: 850px;
+    border: 1px solid #c5cae9;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 16px rgba(60,60,120,0.09);
+}
+
+footer {
+    text-align: center;
+    padding: 1em 0 0.5em 0;
+    color: #888;
+    font-size: 0.95em;
+    margin-top: 2em;
+}

@@ -1,0 +1,150 @@
+// Modèle du Jeu Safari des Atomes
+digraph SafariDesAtomes_GameModel {
+	node [shape=plain]
+	edge [fontname=Helvetica fontsize=8 len=1.8 minlen=1.5]
+	compound=true concentrate=true fontname=Helvetica fontsize=10 nodesep=0.8 overlap=false rankdir=TB ranksep=1.2 splines=spline
+	SafariAtomesShell [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="khaki">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: EducationalGameShell&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>SafariAtomesShell</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- publicCible: 8-10 ans</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- objectifs: Identifier éléments (nom, symbole, utilité)</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- thème: Laboratoire Scientifique</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ démarrerExploration()</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ gérerSession()</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	subgraph cluster_atomes_learning_content {
+		color=lightgrey fontcolor=black label="Contenu: Éléments Chimiques" style=filled
+		ElementIdentificationObjective [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: LearningObjective&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ElementIdentificationObjective</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- description: Associer Symbole-Nom-Utilité pour N éléments</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- critères: 80% de réussite par élément</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		ElementDatabase [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="palegreen">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: DomainSpecificContent&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ElementDatabase</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- typeContenu: Données sur les éléments</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- structure: {nom, symbole, utilité, image, distracteurs}</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ getElementData(niveau): ElementInfo</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_atomes_exercise_engine {
+		color=lightgrey fontcolor=black label="Moteur d'Exercice: Atomes" style=filled
+		QCMElementType [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: ExerciseType&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>QCMElementType</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- typeInteraction: QCM (Choix Multiple)</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- formatPrésentation: Question textuelle + options</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- formatSolution: Option correcte (String)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		AtomDifficultyManager [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="powderblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: DifficultyController&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AtomDifficultyManager</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- paramètres: nbÉlémentsParNiveau, complexitéDistracteurs</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- niveauActuel: int</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ ajusterSelonNiveau()</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		AtomExerciseFactory [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="moccasin">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: ExerciseGenerator&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AtomExerciseFactory</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- typesExercicesSupportés: [Symbole-&gt;Nom, Nom-&gt;Symbole, Élément-&gt;Utilité]</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ générerDéfiAtomique(typeDéfi, niveau): AtomicChallenge</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		AtomicChallenge [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgoldenrodyellow">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: PlayableExercise&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AtomicChallenge</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- questionAffichée: String</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- optionsProposées: List&lt;String&gt;</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- réponseCorrecte: String</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- imageÉlément?: String</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ afficherDéfi()</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ vérifierRéponse(réponseUtilisateur)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	}
+	subgraph cluster_atomes_learner_interaction {
+		color=lightgrey fontcolor=black label="Interaction & Progression: Atomes" style=filled
+		AtomProgressionSystem [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightskyblue">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: ProgressionManager&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AtomProgressionSystem</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- stratégie: Linéaire par lot d'éléments</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- scorePourNiveauSup: int</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ déterminerProchainÉlémentOuNiveau()</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		AtomFeedbackUnit [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightsalmon">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: FeedbackEngine&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>AtomFeedbackUnit</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- typeFeedback: Immédiat, Correctif (donne la bonne réponse)</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ donnerRetourScientifique()</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+		ScientistProfile [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightpink">
+  <TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="lightblue"><FONT POINT-SIZE="9" COLOR="dimgray">&lt;&lt;Instance de: UserProfile&gt;&gt;</FONT><BR ALIGN="CENTER"/><B>ScientistProfile</B></TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Attributs Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- nomScientifiqueEnHerbe: String</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- élémentsDécouverts: List&lt;String&gt;</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- scoreTotal: int</FONT><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">- niveauActuel: int</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+  <TR><TD ALIGN="LEFT" COLSPAN="2" BALIGN="LEFT" BGCOLOR="white">
+    <B>Rôles Spécifiques:</B><BR ALIGN="LEFT"/>
+    <FONT POINT-SIZE="9">+ enregistrerDécouverte()</FONT><BR ALIGN="LEFT"/>
+  </TD></TR>
+</TABLE>>]
+	}
+	SafariAtomesShell -> ElementIdentificationObjective [label="\"vise à atteindre\"" arrowhead=vee style=dashed]
+	SafariAtomesShell -> AtomProgressionSystem [label="\"utilise\"" arrowhead=none arrowtail=diamond dir=forward]
+	SafariAtomesShell -> AtomExerciseFactory [label="\"emploie\"" arrowhead=none arrowtail=diamond dir=forward]
+	SafariAtomesShell -> AtomFeedbackUnit [label="\"utilise\"" arrowhead=none arrowtail=diamond dir=forward]
+	SafariAtomesShell -> ScientistProfile [label="\"gère pour\"" arrowhead=none arrowtail=odiamond dir=forward]
+	ElementIdentificationObjective -> ElementDatabase [label="\"se base sur contenu de\"" arrowhead=vee constraint=false style=dashed]
+	AtomExerciseFactory -> ElementIdentificationObjective [label="\"cible\"" arrowhead=vee style=dashed]
+	AtomExerciseFactory -> ElementDatabase [label="\"puise dans\"" arrowhead=vee style=dashed]
+	AtomExerciseFactory -> QCMElementType [label="\"selon type\"" arrowhead=vee style=dashed]
+	AtomExerciseFactory -> AtomDifficultyManager [label="\"configuré par\"" arrowhead=vee style=dashed]
+	AtomExerciseFactory -> AtomicChallenge [label="\"crée\"" arrowhead=vee style=dashed]
+	AtomicChallenge -> QCMElementType [label="\"est un type de\"" arrowhead=empty dir=back style=dashed]
+	AtomProgressionSystem -> ElementIdentificationObjective [label="\"guide vers maîtrise de\"" arrowhead=vee style=dashed]
+	AtomProgressionSystem -> ScientistProfile [label="\"utilise performance de\"" arrowhead=vee style=dashed]
+	AtomProgressionSystem -> AtomDifficultyManager [label="\"peut influencer\"" arrowhead=vee style=dashed]
+	AtomicChallenge -> AtomFeedbackUnit [label="\"déclenche feedback de\"" arrowhead=vee lhead=cluster_atomes_learner_interaction style=dashed]
+	ScientistProfile -> AtomicChallenge [label="\"interagit avec\"" arrowhead=none constraint=false style=dotted]
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jeu d'Astronomie</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #001f3f; color: #fff; text-align: center; padding: 20px; }
+        .container { background: #012a4a; border-radius: 12px; padding: 20px; max-width: 600px; margin: auto; }
+        h1 { margin-bottom: 10px; }
+        .question { margin: 20px 0; }
+        .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .option { background: #014f86; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        .option:hover { background: #0288d1; }
+        .option.correct { background: #2ecc40; }
+        .option.incorrect { background: #ff4136; }
+        .feedback { height: 24px; margin: 15px 0; }
+        .progress { font-size: 14px; margin-bottom: 10px; }
+        #next { padding: 8px 16px; background: #0074d9; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+        #next:disabled { background: #aaa; cursor: default; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔭 Jeu d'Astronomie</h1>
+    <div class="progress" id="progress">Question <span id="current">1</span> / <span id="total">8</span></div>
+    <div class="question" id="question">Quel est ce groupe d’étoiles ?</div>
+    <img id="img" src="" alt="" style="max-width:100%; border-radius:8px;">
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <button id="next" disabled>Suivant</button>
+</div>
+
+<script>
+    class AstronomyGame {
+        constructor() {
+            this.data = [
+                { name: 'Orion', image: 'orion.jpg', choices: ['Orion','Grande Ourse','Andromède'] },
+                { name: 'Grande Ourse', image: 'ursa_major.jpg', choices: ['Caelum','Cassiopeia','Grande Ourse'] },
+                { name: 'Andromède', image: 'andromeda.jpg', choices: ['Andromède','Lyre','Cygne'] },
+                { name: 'Lyre', image: 'lyra.jpg', choices: ['Lyre','Orion','Cancer'] },
+                { name: 'Cygne', image: 'cygnus.jpg', choices: ['Cassiopeia','Cygne','Hydre'] },
+                { name: 'Cassiopeia', image: 'cassiopeia.jpg', choices: ['Cassiopeia','Taureau','Scorpion'] },
+                { name: 'Taureau', image: 'taurus.jpg', choices: ['Taureau','Poissons','Lion'] },
+                { name: 'Lion', image: 'leo.jpg', choices: ['Bélier','Lion','Cancer'] }
+            ];
+            this.current = 0;
+            this.total = this.data.length;
+            this.score = 0;
+            this.initElements();
+            this.loadQuestion();
+        }
+
+        initElements() {
+            this.questionEl = document.getElementById('question');
+            this.imgEl = document.getElementById('img');
+            this.optionsEl = document.getElementById('options');
+            this.feedbackEl = document.getElementById('feedback');
+            this.nextBtn = document.getElementById('next');
+            this.currentEl = document.getElementById('current');
+            this.totalEl = document.getElementById('total');
+            this.totalEl.textContent = this.total;
+            this.nextBtn.addEventListener('click', () => this.next());
+        }
+
+        loadQuestion() {
+            const { name, image, choices } = this.data[this.current];
+            this.questionEl.textContent = 'Quelle constellation est-ce ?';
+            this.imgEl.src = `images/${image}`;
+            this.optionsEl.innerHTML = '';
+            this.feedbackEl.textContent = '';
+            this.nextBtn.disabled = true;
+            choices.slice().sort(() => Math.random()-0.5)
+                .forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.textContent = opt;
+                    btn.className = 'option';
+                    btn.onclick = () => this.check(opt, name, btn);
+                    this.optionsEl.appendChild(btn);
+                });
+            this.currentEl.textContent = this.current + 1;
+        }
+
+        check(selected, correct, btn) {
+            this.optionsEl.querySelectorAll('button').forEach(b => b.disabled = true);
+            if (selected === correct) {
+                btn.classList.add('correct');
+                this.feedbackEl.textContent = '✔️ Exact !';
+                this.score++;
+            } else {
+                btn.classList.add('incorrect');
+                this.feedbackEl.textContent = `❌ Ce n’est pas ${selected}. C’était ${correct}.`;
+                this.optionsEl.querySelectorAll('button')
+                    .forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+            }
+            this.nextBtn.disabled = false;
+        }
+
+        next() {
+            this.current++;
+            if (this.current < this.total) this.loadQuestion();
+            else this.end();
+        }
+
+        end() {
+            this.questionEl.textContent = `Terminé ! Score : ${this.score}/${this.total}`;
+            this.imgEl.style.display = 'none';
+            this.optionsEl.innerHTML = '';
+            this.feedbackEl.textContent = '';
+            this.nextBtn.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => new AstronomyGame());
+</script>
+</body>
+</html>

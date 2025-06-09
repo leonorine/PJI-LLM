@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu de Géographie - Trouve le Continent</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            color: #005580;
+        }
+        #question {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+        .option {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 1rem 2rem;
+            background-color: #b3e6ff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #66d9ff;
+        }
+        #feedback {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        #score {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<h1>Où se trouve ce pays ?</h1>
+<div id="question">Loading...</div>
+<div id="options"></div>
+<div id="feedback"></div>
+<div id="score">Score : 0</div>
+
+<script>
+    const questions = [
+        { country: "Brésil", answer: "Amérique du Sud" },
+        { country: "France", answer: "Europe" },
+        { country: "Kenya", answer: "Afrique" },
+        { country: "Chine", answer: "Asie" },
+        { country: "Australie", answer: "Océanie" },
+        { country: "Canada", answer: "Amérique du Nord" },
+    ];
+
+    const options = [
+        "Europe", "Asie", "Afrique", "Amérique du Nord",
+        "Amérique du Sud", "Océanie"
+    ];
+
+    let score = 0;
+    let currentIndex = 0;
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function showQuestion() {
+        document.getElementById("feedback").textContent = "";
+        const question = questions[currentIndex];
+        document.getElementById("question").textContent = `Sur quel continent se trouve ${question.country} ?`;
+
+        const shuffledOptions = shuffle([...options]);
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        shuffledOptions.forEach(option => {
+            const btn = document.createElement("button");
+            btn.className = "option";
+            btn.textContent = option;
+            btn.onclick = () => checkAnswer(option);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected) {
+        const correct = questions[currentIndex].answer;
+        const feedback = document.getElementById("feedback");
+        if (selected === correct) {
+            feedback.textContent = "Bravo ! C'est la bonne réponse.";
+            feedback.style.color = "green";
+            score++;
+        } else {
+            feedback.textContent = `Oups ! La bonne réponse est ${correct}.`;
+            feedback.style.color = "red";
+        }
+        document.getElementById("score").textContent = `Score : ${score}`;
+        currentIndex++;
+        setTimeout(() => {
+            if (currentIndex < questions.length) {
+                showQuestion();
+            } else {
+                document.getElementById("question").textContent = "Fin du jeu !";
+                document.getElementById("options").innerHTML = "";
+            }
+        }, 1500);
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>

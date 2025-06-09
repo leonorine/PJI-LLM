@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre de Jeux Éducatifs Safari</title>
+    <style>
+        /* CSS Général */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        header.app-header {
+            background-color: #4CAF50; /* Thème Safari Vert */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        #game-selection-area {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .game-choice-button {
+            background-color: #FF9800; /* Thème Safari Orange */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 250px;
+            text-align: center;
+        }
+
+        .game-choice-button:hover {
+            background-color: #FB8C00;
+        }
+
+        #active-game-area {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Styles Communs aux Jeux (peuvent être étendus par chaque jeu) */
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+        .game-info span { font-weight: bold; }
+
+        .progress-bar-container {
+            width: 100%; background-color: #ddd; border-radius: 5px; height: 20px; margin-bottom:20px; overflow: hidden;
+        }
+        #game-progress-bar {
+            width: 0%; height: 100%; background-color: #4CAF50; transition: width 0.3s; border-radius: 5px;
+        }
+
+        #exercise-display-area {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            min-height: 100px;
+            text-align: center;
+        }
+        #exercise-question { font-size: 1.3em; margin-bottom: 15px; }
+        #exercise-image { max-width: 150px; max-height:150px; margin-top:10px; border-radius: 5px; display: none; }
+
+        #exercise-options-area {
+            display: flex;
+            flex-direction: column; /* Par défaut, peut être changé par le jeu */
+            gap: 10px;
+            align-items: center;
+        }
+        .option-btn {
+            background-color: #2196F3; color: white; border: none; padding: 12px 20px;
+            font-size: 1em; border-radius: 5px; cursor: pointer; min-width: 200px;
+            transition: background-color 0.2s;
+        }
+        .option-btn:hover { background-color: #1976D2; }
+        /* Style spécifique pour un champ de saisie si un jeu l'utilise */
+        .input-answer {
+            padding: 10px; font-size: 1.1em; width: 100px; text-align: center;
+            border: 1px solid #ccc; border-radius: 5px; margin-right: 10px;
+        }
+        #submit-numeric-answer-btn {
+            background-color: #FFC107; color: #333;
+        }
+
+
+        #feedback-display-area {
+            margin-top: 15px; padding: 10px; font-size: 1.1em; font-weight: bold;
+            min-height: 30px; border-radius: 5px; text-align: center;
+        }
+        .feedback-correct { background-color: #d4edda; color: #155724; }
+        .feedback-incorrect { background-color: #f8d7da; color: #721c24; }
+
+        #back-to-selection-btn {
+            display: block;
+            margin: 20px auto 0 auto;
+            background-color: #607D8B;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #back-to-selection-btn:hover { background-color: #546E7A;}
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <header class="app-header">
+        Safari Ludo-Éducatif
+    </header>
+
+    <section id="game-selection-area">
+        <h2>Choisis ton Aventure !</h2>
+        <!-- Les boutons seront ajoutés par JS -->
+    </section>
+
+    <section id="active-game-area" class="hidden">
+        <h2 id="game-title-display">Titre du Jeu</h2>
+        <div class="game-info">
+            Niveau: <span id="game-level-display">1</span> | Score: <span id="game-score-display">0</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="game-progress-bar"></div>
+        </div>
+
+        <div id="exercise-display-area">
+            <p id="exercise-question">Question ici...</p>
+            <img id="exercise-image" src="" alt="Illustration">
+            <div id="exercise-options-area">
+                <!-- Options dynamiques ici -->
+            </div>
+        </div>
+
+        <div id="feedback-display-area">
+            <!-- Feedback ici -->
+        </div>
+        <button id="back-to-selection-btn">Retour au Choix des Jeux</button>
+    </section>
+</div>
+
+<script>
+    // --- Moteur de Règles Générique (Simplifié) et Gestionnaire de Jeu ---
+    const GameEngine = {
+        gameState: {},
+        activeGameDefinition: null,
+        uiElements: {},
+
+        initialize(uiElements) {
+            this.uiElements = uiElements;
+            this.uiElements.backButton.addEventListener('click', () => this.showGameSelection());
+        },
+
+        loadGame(gameDefinition) {
+            this.activeGameDefinition = gameDefinition;
+            this.gameState = {
+                gameId: gameDefinition.id,
+                title: gameDefinition.title,
+                currentLevel: 1,
+                currentScore: 0,
+                questionsAnsweredInLevel: 0,
+                questionsPerLevelTarget: gameDefinition.config.questionsPerLevelStart || 5,
+                currentExerciseData: null,
+                isCorrectLastAnswer: null,
+                difficultyParams: gameDefinition.rules.getInitialDifficultyParams(1),
+                totalLevels: Object.keys(gameDefinition.contentSource || {}).length || 5 // Estimer le nombre de niveaux
+            };
+            this.uiElements.gameSelectionArea.classList.add('hidden');
+            this.uiElements.activeGameArea.classList.remove('hidden');
+            this.uiElements.gameTitleDisplay.textContent = this.gameState.title;
+            this.startGame();
+        },
+
+        startGame() {
+            this.gameState.currentLevel = 1;
+            this.gameState.currentScore = 0;
+            this.gameState.questionsAnsweredInLevel = 0;
+            this.gameState.difficultyParams = this.activeGameDefinition.rules.getInitialDifficultyParams(1);
+            this.nextExercise();
+            this.updateGeneralUI();
+        },
+
+        nextExercise() {
+            if (this.gameState.currentLevel > this.gameState.totalLevels && this.gameState.totalLevels > 0) {
+                this.endGame("Félicitations ! Vous avez terminé tous les niveaux de ce jeu !");
+                return;
+            }
+            this.gameState.currentExerciseData = this.activeGameDefinition.rules.generateExercise(
+                this.gameState,
+                this.activeGameDefinition.contentSource
+            );
+            this.activeGameDefinition.uiRenderer.renderExercise(
+                this.gameState.currentExerciseData,
+                this.uiElements.exerciseQuestion,
+                this.uiElements.exerciseImage,
+                this.uiElements.exerciseOptionsArea,
+                (userAnswer) => this.processUserAnswer(userAnswer) // Passer le callback pour la réponse
+            );
+            this.uiElements.feedbackDisplay.textContent = '';
+            this.uiElements.feedbackDisplay.className = '';
+        },
+
+        processUserAnswer(userAnswer) {
+            const evaluation = this.activeGameDefinition.rules.evaluateAnswer(
+                this.gameState.currentExerciseData,
+                userAnswer
+            );
+            this.gameState.isCorrectLastAnswer = evaluation.isCorrect;
+
+            this.gameState.currentScore = this.activeGameDefinition.rules.calculateScore(
+                this.gameState.currentScore,
+                evaluation.isCorrect
+            );
+
+            const feedbackMessage = this.activeGameDefinition.rules.getFeedback(
+                evaluation.isCorrect,
+                this.gameState.currentExerciseData,
+                evaluation.actualCorrectAnswer
+            );
+            this.activeGameDefinition.uiRenderer.renderFeedback(
+                feedbackMessage,
+                evaluation.isCorrect,
+                this.uiElements.feedbackDisplay
+            );
+
+            if (evaluation.isCorrect) {
+                this.gameState.questionsAnsweredInLevel++;
+            }
+
+            const progression = this.activeGameDefinition.rules.checkProgression(this.gameState);
+            if (progression.levelUp) {
+                this.gameState.currentLevel = progression.newLevel;
+                this.gameState.questionsAnsweredInLevel = 0;
+                this.gameState.difficultyParams = this.activeGameDefinition.rules.getInitialDifficultyParams(this.gameState.currentLevel);
+                // Augmenter la cible de questions par niveau progressivement (si défini dans config)
+                if(this.activeGameDefinition.config.questionsPerLevelIncrement && this.gameState.questionsPerLevelTarget < (this.activeGameDefinition.config.maxQuestionsPerLevel || 10)) {
+                    this.gameState.questionsPerLevelTarget += this.activeGameDefinition.config.questionsPerLevelIncrement;
+                }
+                this.uiElements.feedbackDisplay.textContent += ` Bravo ! Niveau ${this.gameState.currentLevel} !`;
+            }
+
+            this.updateGeneralUI();
+
+            if (progression.continueGame) {
+                setTimeout(() => this.nextExercise(), evaluation.isCorrect ? 1500 : 3000);
+            } else if (progression.gameCompleted) {
+                this.endGame(progression.completionMessage || "Jeu terminé ! Excellent travail !");
+            }
+        },
+
+        updateGeneralUI() {
+            this.activeGameDefinition.uiRenderer.renderScoreLevelProgress(
+                this.gameState,
+                this.uiElements.gameLevelDisplay,
+                this.uiElements.gameScoreDisplay,
+                this.uiElements.gameProgressBar
+            );
+        },
+
+        endGame(message) {
+            this.uiElements.exerciseQuestion.textContent = message;
+            this.uiElements.exerciseOptionsArea.innerHTML = '';
+            this.uiElements.feedbackDisplay.textContent = `Score final : ${this.gameState.currentScore}`;
+            this.uiElements.feedbackDisplay.className = 'feedback-correct'; // Style positif
+        },
+
+        showGameSelection() {
+            this.uiElements.activeGameArea.classList.add('hidden');
+            this.uiElements.gameSelectionArea.classList.remove('hidden');
+            this.activeGameDefinition = null; // Réinitialiser le jeu actif
+        }
+    };
+
+    // --- Définitions des Jeux Spécifiques ---
+    const GAMES_DEFINITIONS = [
+        // --- SAFARI MATHS ---
+        {
+            id: "safariMaths",
+            title: "Safari Maths (Addition/Soustraction)",
+            config: {
+                questionsPerLevelStart: 5,
+                questionsPerLevelIncrement: 1,
+                maxQuestionsPerLevel: 8,
+            },
+            contentSource: null, // Les maths sont générées algorithmiquement
+            rules: {
+                getInitialDifficultyParams: (level) => ({
+                    maxOperandValue: level * 5 + 5,
+                    allowNegative: false // Pour les 6-8 ans
+                }),
+                generateExercise: (gameState) => {
+                    const params = gameState.difficultyParams;
+                    const opType = Math.random() < 0.5 ? '+' : '-';
+                    let n1 = Math.floor(Math.random() * params.maxOperandValue) + 1;
+                    let n2 = Math.floor(Math.random() * params.maxOperandValue) + 1;
+                    let correctAnswer;
+
+                    if (opType === '-') {
+                        if (n1 < n2) { [n1, n2] = [n2, n1]; } // Assurer n1 >= n2
+                        if (n1 === n2 && n1 > 1) n2 = Math.floor(Math.random() * (n1 -1)) +1; // Eviter trop de X-X=0
+                        else if (n1 === n2 && n1 === 1) {n1 = 2; n2=1;} // Eviter 1-1=0
+                        correctAnswer = n1 - n2;
+                    } else {
+                        correctAnswer = n1 + n2;
+                    }
+
+                    const questionText = `${n1} ${opType} ${n2} = ?`;
+                    const options = new Set();
+                    options.add(correctAnswer.toString());
+                    while (options.size < 3) { // Générer 2 distracteurs uniques
+                        let distractor = correctAnswer + (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? -1 : 1);
+                        if (distractor < 0 && !params.allowNegative) distractor = Math.abs(distractor) +1; // S'assurer que les distracteurs sont positifs
+                        if (distractor !== correctAnswer) options.add(distractor.toString());
+                    }
+                    return { questionText, options: Array.from(options).sort(() => Math.random() - 0.5), correctAnswer: correctAnswer.toString(), imagePath: null };
+                },
+                evaluateAnswer: (exerciseData, userAnswer) => ({
+                    isCorrect: userAnswer === exerciseData.correctAnswer,
+                    actualCorrectAnswer: exerciseData.correctAnswer
+                }),
+                getFeedback: (isCorrect, exerciseData, actualCorrectAnswer) =>
+                    isCorrect ? "Bravo !" : `Oups ! La bonne réponse était ${actualCorrectAnswer}.`,
+                calculateScore: (currentScore, isCorrect) => isCorrect ? currentScore + 10 : Math.max(0, currentScore - 2),
+                checkProgression: (gameState) => {
+                    let levelUp = false;
+                    let newLevel = gameState.currentLevel;
+                    if (gameState.questionsAnsweredInLevel >= gameState.questionsPerLevelTarget) {
+                        levelUp = true;
+                        newLevel++;
+                    }
+                    return {
+                        levelUp,
+                        newLevel,
+                        continueGame: !(levelUp && newLevel > (gameState.totalLevels || 5)), // Estimer 5 niveaux par défaut si pas de DB
+                        gameCompleted: levelUp && newLevel > (gameState.totalLevels || 5)
+                    };
+                }
+            },
+            uiRenderer: { // Rendu QCM standard pour les maths aussi
+                renderExercise: (exerciseData, questionEl, imageEl, optionsAreaEl, answerCallback) => {
+                    questionEl.textContent = exerciseData.questionText;
+                    imageEl.style.display = 'none';
+                    optionsAreaEl.innerHTML = '';
+                    optionsAreaEl.style.flexDirection = 'row'; // Mettre les options en ligne pour les maths
+                    optionsAreaEl.style.justifyContent = 'center';
+                    exerciseData.options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.classList.add('option-btn');
+                        btn.textContent = opt;
+                        btn.onclick = () => answerCallback(opt);
+                        optionsAreaEl.appendChild(btn);
+                    });
+                },
+                renderFeedback: (message, isCorrect, feedbackEl) => {
+                    feedbackEl.textContent = message;
+                    feedbackEl.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
+                },
+                renderScoreLevelProgress: (gameState, levelEl, scoreEl, progressEl) => {
+                    levelEl.textContent = gameState.currentLevel;
+                    scoreEl.textContent = gameState.currentScore;
+                    const progressPercent = (gameState.questionsAnsweredInLevel / gameState.questionsPerLevelTarget) * 100;
+                    progressEl.style.width = `${progressPercent}%`;
+                }
+            }
+        },
+        // --- SAFARI DES MOTS ---
+        {
+            id: "safariMots",
+            title: "Safari des Mots (Orthographe)",
+            config: {
+                questionsPerLevelStart: 5,
+                questionsPerLevelIncrement: 1,
+                maxQuestionsPerLevel: 8,
+            },
+            contentSource: { // wordDatabase
+                1: [ { word: "chat", distractors: ["cha", "shat"] }, { word: "vélo", distractors: ["vello", "véloe"] }, { word: "pomme", distractors: ["pome", "paume"] } ],
+                2: [ { word: "maison", distractors: ["maizon", "meson"] }, { word: "école", distractors: ["ecole", "écolle"] }, { word: "soleil", distractors: ["solleil", "soleille"] } ],
+                3: [ { word: "oiseau", distractors: ["oiso", "oiseux"] }, { word: "temps", distractors: ["temp", "tan"] }, { word: "gâteau", distractors: ["gateau", "gato"] } ]
+            },
+            rules: {
+                getInitialDifficultyParams: (level) => ({}), // Pas de params spécifiques autres que le niveau ici
+                generateExercise: (gameState, contentSource) => {
+                    const levelDb = contentSource[gameState.currentLevel] || contentSource[Object.keys(contentSource).pop()];
+                    const wordData = levelDb[Math.floor(Math.random() * levelDb.length)];
+                    const options = [wordData.word, ...wordData.distractors.slice(0,2)]; // S'assurer d'avoir 2 distracteurs max
+                    return {
+                        questionText: "Choisis le mot bien orthographié :",
+                        options: options.sort(() => Math.random() - 0.5),
+                        correctAnswer: wordData.word,
+                        imagePath: null
+                    };
+                },
+                evaluateAnswer: (exerciseData, userAnswer) => ({
+                    isCorrect: userAnswer === exerciseData.correctAnswer,
+                    actualCorrectAnswer: exerciseData.correctAnswer
+                }),
+                getFeedback: (isCorrect, exerciseData, actualCorrectAnswer) =>
+                    isCorrect ? "Bravo ! C'est la bonne orthographe !" : `Oups ! Le mot correct était "${actualCorrectAnswer}".`,
+                calculateScore: (currentScore, isCorrect) => isCorrect ? currentScore + 10 : Math.max(0, currentScore - 3),
+                checkProgression: (gameState) => { // Même logique de progression que les maths
+                    let levelUp = false;
+                    let newLevel = gameState.currentLevel;
+                    if (gameState.questionsAnsweredInLevel >= gameState.questionsPerLevelTarget) {
+                        levelUp = true;
+                        newLevel++;
+                    }
+                    const totalDefinedLevels = Object.keys(GAMES_DEFINITIONS.find(g => g.id === gameState.gameId).contentSource).length;
+                    return {
+                        levelUp,
+                        newLevel,
+                        continueGame: !(levelUp && newLevel > totalDefinedLevels),
+                        gameCompleted: levelUp && newLevel > totalDefinedLevels
+                    };
+                }
+            },
+            uiRenderer: { // Rendu QCM standard
+                renderExercise: (exerciseData, questionEl, imageEl, optionsAreaEl, answerCallback) => {
+                    questionEl.textContent = exerciseData.questionText;
+                    imageEl.style.display = 'none';
+                    optionsAreaEl.innerHTML = '';
+                    optionsAreaEl.style.flexDirection = 'column'; // Options en colonne
+                    exerciseData.options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.classList.add('option-btn');
+                        btn.textContent = opt;
+                        btn.onclick = () => answerCallback(opt);
+                        optionsAreaEl.appendChild(btn);
+                    });
+                },
+                renderFeedback: (message, isCorrect, feedbackEl) => {
+                    feedbackEl.textContent = message;
+                    feedbackEl.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
+                },
+                renderScoreLevelProgress: (gameState, levelEl, scoreEl, progressEl) => {
+                    levelEl.textContent = gameState.currentLevel;
+                    scoreEl.textContent = gameState.currentScore;
+                    const progressPercent = (gameState.questionsAnsweredInLevel / gameState.questionsPerLevelTarget) * 100;
+                    progressEl.style.width = `${progressPercent}%`;
+                }
+            }
+        },
+        // --- SAFARI DES ATOMES ---
+        {
+            id: "safariAtomes",
+            title: "Safari des Atomes (Chimie)",
+            config: {
+                questionsPerLevelStart: 6, // 2 de chaque type de question
+                questionsPerLevelIncrement: 0, // Pas d'incrément ici, déjà 3 types
+            },
+            contentSource: { // elementDatabase
+                1: [ { nom: "Hydrogène", symbole: "H", utilite: "Composant de l'eau", image: "images/elements/hydrogene.png", dNom: ["Hélium", "Oxygène"], dSym: ["He", "O"], dUtil: ["Fait voler les ballons", "Pour respirer"] },
+                    { nom: "Oxygène", symbole: "O", utilite: "Pour respirer", image: "images/elements/oxygene.png", dNom: ["Azote", "Carbone"], dSym: ["N", "C"], dUtil: ["Principal gaz de l'air", "Base de la vie"] } ],
+                2: [ { nom: "Fer", symbole: "Fe", utilite: "Pour l'acier", image: "images/elements/fer.png", dNom: ["Fluor", "Cuivre"], dSym: ["F", "Cu"], dUtil: ["Dans le dentifrice", "Fils électriques"] },
+                    { nom: "Aluminium", symbole: "Al", utilite: "Pour les canettes", image: "images/elements/aluminium.png", dNom: ["Argent", "Or"], dSym: ["Ag", "Au"], dUtil: ["Bijoux précieux", "Trésors"] } ]
+            },
+            rules: {
+                getInitialDifficultyParams: (level) => ({}),
+                generateExercise: (gameState, contentSource) => {
+                    const levelDb = contentSource[gameState.currentLevel] || contentSource[Object.keys(contentSource).pop()];
+                    const elementData = levelDb[Math.floor(Math.random() * levelDb.length)];
+                    const type = Math.floor(Math.random() * 3); // 0: Sym->Nom, 1: Nom->Sym, 2: Elem->Util
+                    let qText, cAns, opts, imgPath = elementData.image || null;
+
+                    switch(type) {
+                        case 0: // Symbole -> Nom
+                            qText = `Quel est le nom de l'élément de symbole "${elementData.symbole}" ?`;
+                            cAns = elementData.nom;
+                            opts = [cAns, ...elementData.dNom.slice(0,2)];
+                            break;
+                        case 1: // Nom -> Symbole
+                            qText = `Quel est le symbole de "${elementData.nom}" ?`;
+                            cAns = elementData.symbole;
+                            opts = [cAns, ...elementData.dSym.slice(0,2)];
+                            break;
+                        default: // Élément -> Utilité
+                            qText = `Quelle est une utilité de "${elementData.nom}" (${elementData.symbole}) ?`;
+                            cAns = elementData.utilite;
+                            opts = [cAns, ...elementData.dUtil.slice(0,2)];
+                            imgPath = null; // Ne pas montrer l'image pour les utilités
+                            break;
+                    }
+                    return { questionText: qText, options: opts.sort(() => Math.random() - 0.5), correctAnswer: cAns, imagePath: imgPath };
+                },
+                evaluateAnswer: (exerciseData, userAnswer) => ({
+                    isCorrect: userAnswer === exerciseData.correctAnswer,
+                    actualCorrectAnswer: exerciseData.correctAnswer
+                }),
+                getFeedback: (isCorrect, exerciseData, actualCorrectAnswer) =>
+                    isCorrect ? "Correct ! Observation scientifique brillante !" : `Presque ! La bonne réponse était "${actualCorrectAnswer}".`,
+                calculateScore: (currentScore, isCorrect) => isCorrect ? currentScore + 15 : Math.max(0, currentScore - 5), // Score un peu différent
+                checkProgression: (gameState) => { // Même logique de progression
+                    let levelUp = false;
+                    let newLevel = gameState.currentLevel;
+                    if (gameState.questionsAnsweredInLevel >= gameState.questionsPerLevelTarget) {
+                        levelUp = true;
+                        newLevel++;
+                    }
+                    const totalDefinedLevels = Object.keys(GAMES_DEFINITIONS.find(g => g.id === gameState.gameId).contentSource).length;
+                    return {
+                        levelUp,
+                        newLevel,
+                        continueGame: !(levelUp && newLevel > totalDefinedLevels),
+                        gameCompleted: levelUp && newLevel > totalDefinedLevels
+                    };
+                }
+            },
+            uiRenderer: { // Rendu QCM standard, mais avec gestion d'image
+                renderExercise: (exerciseData, questionEl, imageEl, optionsAreaEl, answerCallback) => {
+                    questionEl.textContent = exerciseData.questionText;
+                    if (exerciseData.imagePath) {
+                        imageEl.src = exerciseData.imagePath;
+                        imageEl.style.display = 'block';
+                    } else {
+                        imageEl.style.display = 'none';
+                    }
+                    optionsAreaEl.innerHTML = '';
+                    optionsAreaEl.style.flexDirection = 'column';
+                    exerciseData.options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.classList.add('option-btn');
+                        btn.textContent = opt;
+                        btn.onclick = () => answerCallback(opt);
+                        optionsAreaEl.appendChild(btn);
+                    });
+                },
+                renderFeedback: (message, isCorrect, feedbackEl) => {
+                    feedbackEl.textContent = message;
+                    feedbackEl.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
+                },
+                renderScoreLevelProgress: (gameState, levelEl, scoreEl, progressEl) => {
+                    levelEl.textContent = gameState.currentLevel;
+                    scoreEl.textContent = gameState.currentScore;
+                    const progressPercent = (gameState.questionsAnsweredInLevel / gameState.questionsPerLevelTarget) * 100;
+                    progressEl.style.width = `${progressPercent}%`;
+                }
+            }
+        }
+    ];
+
+    // --- Initialisation de l'Application ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const uiElements = {
+            gameSelectionArea: document.getElementById('game-selection-area'),
+            activeGameArea: document.getElementById('active-game-area'),
+            gameTitleDisplay: document.getElementById('game-title-display'),
+            gameLevelDisplay: document.getElementById('game-level-display'),
+            gameScoreDisplay: document.getElementById('game-score-display'),
+            gameProgressBar: document.getElementById('game-progress-bar'),
+            exerciseQuestion: document.getElementById('exercise-question'),
+            exerciseImage: document.getElementById('exercise-image'),
+            exerciseOptionsArea: document.getElementById('exercise-options-area'),
+            feedbackDisplay: document.getElementById('feedback-display-area'),
+            backButton: document.getElementById('back-to-selection-btn')
+        };
+
+        GameEngine.initialize(uiElements);
+
+        // Créer les boutons de sélection de jeu
+        GAMES_DEFINITIONS.forEach(gameDef => {
+            const btn = document.createElement('button');
+            btn.classList.add('game-choice-button');
+            btn.textContent = gameDef.title;
+            btn.onclick = () => GameEngine.loadGame(gameDef);
+            uiElements.gameSelectionArea.appendChild(btn);
+        });
+    });
+
+</script>
+</body>
+</html>

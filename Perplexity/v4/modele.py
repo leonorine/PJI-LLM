@@ -88,10 +88,10 @@ if __name__ == "__main__":
     comparaison = generer_comparaison_trois_domaines()
 
     try:
-        modele_mesures.render('modele_grandeurs_mesures', format='png', cleanup=True)
-        comparaison.render('comparaison_trois_domaines', format='png', cleanup=True)
+        modele_mesures.render('modele_grandeurs_mesures', format='pdf', cleanup=True)
+        comparaison.render('comparaison_trois_domaines', format='pdf', cleanup=True)
         print("Diagrammes générés avec succès:")
-        print("- modele_grandeurs_mesures.png")
-        print("- comparaison_trois_domaines.png")
+        print("- modele_grandeurs_mesures.pdf")
+        print("- comparaison_trois_domaines.pdf")
     except Exception as e:
         print(f"Erreur lors de la génération: {e}")
