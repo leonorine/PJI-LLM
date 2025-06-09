@@ -11,7 +11,7 @@ function updateAppViewer() {
     document.getElementById('selected-version-title').textContent =
         "Version " + currentVersion.substring(1);
     const iframe = document.getElementById('app-viewer');
-    iframe.src = `../${currentLLM}/${currentVersion}/index.html`;
+    iframe.src = `./${currentLLM}/${currentVersion}/index.html`;
 }
 
 // Gestion des tabs de version
