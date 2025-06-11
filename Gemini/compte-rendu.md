@@ -1230,3 +1230,119 @@ Prompt 12 : Je veux une une évaluation comparative des forces et limites du sys
 
 Réponse :
 ```
+
+
+Absolument. Voici le code LaTeX du Canvas modifié pour un affichage en mode portrait, en utilisant l'environnement longtable pour permettre au tableau de s'étendre sur deux pages si nécessaire.
+\documentclass[10pt, a4paper]{article} % Changement : 'landscape' a été retiré pour passer en mode portrait
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable} % Utilisation du package pour les tableaux sur plusieurs pages
+\usepackage{geometry}
+
+% Définition de nouvelles colonnes pour l'alignement vertical et le retour à la ligne
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% Ajustement des marges pour le mode portrait
+\geometry{left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
+
+\begin{document}
+
+% Remplacement de l'environnement 'table' et 'tabular' par 'longtable'
+\renewcommand{\arraystretch}{1.6} % Augmente l'espacement vertical pour la lisibilité
+\begin{longtable}{
+>{\bfseries}L{3cm} % Colonne pour le composant, en gras
+L{6.5cm}             % Colonne pour les forces (largeur ajustée)
+L{6.5cm}             % Colonne pour les limites (largeur ajustée)
+}
+
+% Le caption et le label sont placés au début pour longtable
+\caption{Grille d'Analyse Comparative des Modèles de Jeux Éducatifs Développés}\\
+\label{tab:analyse_comparative_long}\\
+\toprule
+\textbf{Composant Analysé} & \textbf{Forces (Capacités Démontrées)} & \textbf{Limites (Points Faibles et Contraintes)} \\
+\midrule
+\endfirsthead
+
+% Définition de l'en-tête qui se répétera sur les pages suivantes
+\multicolumn{3}{c}%
+{{\tablename\ \thetable{} -- Suite de la page précédente}} \\
+\toprule
+\textbf{Composant Analysé} & \textbf{Forces (Capacités Démontrées)} & \textbf{Limites (Points Faibles et Contraintes)} \\
+\midrule
+\endhead
+
+% Définition du pied de page pour toutes les pages sauf la dernière
+\midrule
+\multicolumn{3}{r}{{Suite à la page suivante}} \\
+\endfoot
+
+% Définition du pied de page pour la dernière page du tableau
+\bottomrule
+\endlastfoot
+
+% --- Contenu du tableau ---
+
+\multicolumn{3}{l}{\textit{\textbf{Étape 1 : Jeu Spécifique à un Domaine}}} \\
+\textbf{Safari Maths} &
+\begin{itemize}
+\item \textbf{Développement Rapide :} La logique algorithmique permet de créer un contenu quasi infini avec peu d'effort initial.
+\item \textbf{Simplicité Structurelle :} Le code est direct, monolithique et facile à comprendre pour une seule tâche définie.
+\item \textbf{Validation de Concept :} Prouve la viabilité du concept de jeu de base (niveaux, score, feedback).
+\end{itemize} &
+\begin{itemize}
+\item \textbf{Rigidité Extrême :} Toute modification de domaine nécessite une réécriture complète du cœur logique.
+\item \textbf{Manque d'Abstraction :} La logique métier et la présentation sont fortement couplées.
+\item \textbf{Non Réutilisable :} Aucun composant n'est conçu pour être réutilisé dans un autre contexte.
+\end{itemize} \\
+\midrule
+
+\multicolumn{3}{l}{\textit{\textbf{Étape 2 : Adaptation et Abstraction du Contenu}}} \\
+\textbf{Safari des Mots \& Mesures} &
+\begin{itemize}
+\item \textbf{Séparation Contenu/Logique :} Démontre une première abstraction clé en séparant le moteur de jeu de la source de données.
+\item \textbf{Flexibilité du Contenu :} L'ajout de nouveaux exercices se fait en modifiant une base de données, sans toucher au code principal.
+\item \textbf{Généralisation Prouvée :} Le même moteur de jeu gère des domaines qualitativement différents.
+\end{itemize} &
+\begin{itemize}
+\item \textbf{Structure d'Interaction Rigide :} Le modèle reste lié à un type d'interaction unique (le QCM).
+\item \textbf{Logique de Génération Statique :} La manière dont un exercice est formulé et dont les distracteurs sont choisis reste codée en dur.
+\end{itemize} \\
+\midrule
+
+% Le saut de page se fera naturellement ici si la place manque sur la première page.
+
+\multicolumn{3}{l}{\textit{\textbf{Étape 3 : Abstraction de la Logique de Jeu}}} \\
+\textbf{Moteur de Règles Générique} &
+\begin{itemize}
+\item \textbf{Extensibilité Maximale :} L'architecture permet d'intégrer n'importe quel jeu en fournissant une "définition de jeu". C'est un système à plugins.
+\item \textbf{Réutilisabilité du Framework :} La logique non spécifique (UI, état, cycle de vie) est centralisée et totalement réutilisable.
+\item \textbf{Inversion de Contrôle :} Le moteur générique appelle la logique spécifique au jeu, un pattern de conception robuste.
+\end{itemize} &
+\begin{itemize}
+\item \textbf{Complexité Initiale Élevée :} Le développement du "moteur" est plus complexe que celui d'un jeu unique.
+\item \textbf{Contrat d'Interface Lourd :} La "définition de jeu" peut devenir un objet de configuration volumineux et verbeux.
+\item \textbf{Risque de Sur-ingénierie :} Peut être plus complexe que nécessaire pour des besoins simples.
+\end{itemize} \\
+\midrule
+
+\multicolumn{3}{l}{\textit{\textbf{Étape 4 : Abstraction Conceptuelle}}} \\
+\textbf{Méta-Modèle} &
+\begin{itemize}
+\item \textbf{Universalité Conceptuelle :} Fournit un cadre de pensée qui transcende la technologie et les domaines.
+\item \textbf{Outil de Conception Prédictif :} Permet de structurer la conception de n'importe quel jeu éducatif.
+\item \textbf{Facilite la Communication :} Crée un vocabulaire commun entre les concepteurs pédagogiques et les développeurs.
+\end{itemize} &
+\begin{itemize}
+\item \textbf{Nature Abstraite :} Le modèle reste théorique et ne garantit pas une implémentation performante ou simple.
+\item \textbf{Ne Résout Pas les Problèmes Complexes :} Ne fournit pas de solution "clé en main" pour l'évaluation de réponses ouvertes ou une adaptativité fine basée sur l'IA.
+\item \textbf{Risque de Mauvaise Interprétation :} Peut être interprété de manière trop rigide ou trop vague, menant à une mauvaise conception logicielle.
+\end{itemize}
+
+\end{longtable}
+
+\end{document}
+
